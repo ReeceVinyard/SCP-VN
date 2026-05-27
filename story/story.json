@@ -1,0 +1,199 @@
+{
+  "knots": {
+    "archives_intro": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "You wake on cold linoleum. Redacted files tower above you. Your head is empty of why you're here."
+        },
+        {
+          "speaker": "",
+          "text": "Look around. Click objects in the room to examine or take them. Press I to open your inventory."
+        }
+      ]
+    },
+    "archives_tutorial": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Maybe you should look around. Things here might respond if you click them."
+        }
+      ]
+    },
+    "archives_find_id": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Researcher ID. The photo might be you—the name field is smudged."
+        }
+      ]
+    },
+    "archives_find_keycard": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Level-2 keycard. Still warm, like someone left in a hurry."
+        }
+      ]
+    },
+    "archives_desk_empty": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "The drawer is empty."
+        }
+      ]
+    },
+    "archives_locker_empty": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Nothing left in the locker."
+        }
+      ]
+    },
+    "archives_door_locked": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Security door. You'll need your keycard."
+        }
+      ]
+    },
+    "archives_need_name": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "The badge reader demands a registered name before it will clear you. Register yourself first."
+        }
+      ]
+    },
+    "archives_exit": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "The reader chirps. The door unlatches into the east corridor."
+        }
+      ]
+    },
+    "archives_shelf_flavor": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Rows of redacted binders. Someone circled a date—yesterday."
+        }
+      ]
+    },
+    "hall_enter": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Papers coat the floor like snow. Somewhere close, something moves."
+        }
+      ]
+    },
+    "paper_left": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Cafeteria memo: all break-room microwaves replaced. Mundane. Almost reassuring."
+        }
+      ]
+    },
+    "paper_left_done": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "You've already read this memo."
+        }
+      ]
+    },
+    "paper_middle": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Incident follow-up—Subject interaction logged. Appendix pages torn out."
+        },
+        {
+          "speaker": "???",
+          "text": "The next line is still loading when something cold finds the nape of your neck.",
+          "tags": ["trigger:scp1_encounter"]
+        }
+      ]
+    },
+    "paper_middle_done": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Scorch marks on the floor. Whatever was here left in a hurry."
+        }
+      ]
+    },
+    "paper_right": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Personnel roster. Every name blacked out except one—unreadable, but familiar."
+        }
+      ]
+    },
+    "paper_right_done": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "Only ash remains."
+        }
+      ]
+    },
+    "hall_return_archives": {
+      "lines": [
+        {
+          "speaker": "",
+          "text": "The archives feel safer than the corridor."
+        }
+      ]
+    },
+    "scp1_encounter": {
+      "lines": [
+        {
+          "speaker": "???",
+          "text": "A shape at the edge of vision. It studies you—measuring friend or threat."
+        }
+      ],
+      "choices": [
+        {
+          "text": "Stay calm. Speak softly.",
+          "next": "scp1_befriend",
+          "set_flag": "scp1_befriended"
+        },
+        {
+          "text": "Back away quickly.",
+          "next": "scp1_hostile",
+          "set_flag": "scp1_hostile"
+        },
+        {
+          "text": "Offer the notes you picked up from other papers.",
+          "next": "scp1_befriend",
+          "set_flag": "scp1_befriended",
+          "requires_any_flags": ["paper_left_read", "paper_right_read"]
+        }
+      ]
+    },
+    "scp1_befriend": {
+      "lines": [
+        {
+          "speaker": "???",
+          "text": "It stills. For now, you think it understands."
+        }
+      ]
+    },
+    "scp1_hostile": {
+      "lines": [
+        {
+          "speaker": "???",
+          "text": "It bristles. You'll hear from it again—and not kindly."
+        }
+      ]
+    }
+  }
+}

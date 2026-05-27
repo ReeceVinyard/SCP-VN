@@ -1,0 +1,224 @@
+[gd_scene load_steps=5 format=3 uid="uid://main_scene"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/exploration_map.gd" id="2_explore"]
+[ext_resource type="Script" path="res://scripts/ui/dialogue_box.gd" id="3_dialogue"]
+[ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="4_inventory"]
+[ext_resource type="Script" path="res://scripts/ui/name_entry_modal.gd" id="5_name"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="ExplorationMap" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_explore")
+
+[node name="Background" type="ColorRect" parent="ExplorationMap"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.14, 0.22, 1)
+
+[node name="MapTitle" type="Label" parent="ExplorationMap"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 32.0
+offset_top = 24.0
+offset_right = 400.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 28
+text = "Archives"
+
+[node name="Hotspots" type="Control" parent="ExplorationMap"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="HUD" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 80.0
+offset_right = -24.0
+offset_bottom = 120.0
+grow_horizontal = 2
+
+[node name="InventoryButton" type="Button" parent="HUD"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Inventory (I)"
+
+[node name="StatusLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Playing as: Researcher"
+vertical_alignment = 1
+
+[node name="DialogueBox" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -280.0
+offset_right = -48.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("3_dialogue")
+
+[node name="Margin" type="MarginContainer" parent="DialogueBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="DialogueBox/Margin"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="DialogueBox/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = " "
+
+[node name="BodyLabel" type="RichTextLabel" parent="DialogueBox/Margin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+fit_content = true
+bbcode_enabled = true
+text = "..."
+scroll_active = false
+
+[node name="ChoicesBox" type="VBoxContainer" parent="DialogueBox/Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ContinueHint" type="Label" parent="DialogueBox/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+text = "Click or press Enter to continue"
+
+[node name="InventoryPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 48.0
+offset_top = -200.0
+offset_right = 420.0
+offset_bottom = 200.0
+grow_vertical = 2
+script = ExtResource("4_inventory")
+
+[node name="InvMargin" type="MarginContainer" parent="InventoryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="InvVBox" type="VBoxContainer" parent="InventoryPanel/InvMargin"]
+layout_mode = 2
+
+[node name="InvTitle" type="Label" parent="InventoryPanel/InvMargin/InvVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Inventory"
+
+[node name="ItemList" type="ItemList" parent="InventoryPanel/InvMargin/InvVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+
+[node name="DescriptionLabel" type="Label" parent="InventoryPanel/InvMargin/InvVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+text = "No items yet."
+
+[node name="NameEntryModal" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -120.0
+offset_right = 220.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_name")
+
+[node name="NameMargin" type="MarginContainer" parent="NameEntryModal"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="NameVBox" type="VBoxContainer" parent="NameEntryModal/NameMargin"]
+layout_mode = 2
+
+[node name="NameTitle" type="Label" parent="NameEntryModal/NameMargin/NameVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Register your name"
+horizontal_alignment = 1
+
+[node name="NameHint" type="Label" parent="NameEntryModal/NameMargin/NameVBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Your ID and keycard are active. The facility needs a name to attach to your clearance."
+
+[node name="NameField" type="LineEdit" parent="NameEntryModal/NameMargin/NameVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Researcher name..."
+
+[node name="ErrorLabel" type="Label" parent="NameEntryModal/NameMargin/NameVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.35, 0.35, 1)
+
+[node name="ConfirmButton" type="Button" parent="NameEntryModal/NameMargin/NameVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Confirm"

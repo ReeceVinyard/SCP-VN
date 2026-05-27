@@ -1,0 +1,155 @@
+extends Control
+
+signal map_changed(map_id: String)
+signal naming_required
+
+@onready var _background: ColorRect = %Background
+@onready var _map_title: Label = %MapTitle
+@onready var _hotspots: Control = %Hotspots
+
+var _map_id: String = ""
+var _last_knot: String = ""
+var _encounter_pending: bool = false
+
+
+func _ready() -> void:
+	DialogueManager.encounter_triggered.connect(func() -> void: _encounter_pending = true)
+	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
+
+
+func load_map(map_id: String) -> void:
+	_map_id = map_id
+	var data: Dictionary = MapRegistry.get_map(map_id)
+	_background.color = data.get("bg_color", Color.BLACK)
+	_map_title.text = data.get("display_name", map_id)
+	_build_hotspots(data.get("hotspots", []))
+	map_changed.emit(map_id)
+
+
+func _build_hotspots(hotspots: Array) -> void:
+	for child in _hotspots.get_children():
+		child.queue_free()
+	for hs in hotspots:
+		var btn := Button.new()
+		var rect: Array = hs["rect"]
+		btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		btn.position = Vector2(rect[0], rect[1]) * Vector2(_hotspots.size)
+		btn.size = Vector2(rect[2], rect[3]) * Vector2(_hotspots.size)
+		btn.anchor_left = rect[0]
+		btn.anchor_top = rect[1]
+		btn.anchor_right = rect[0] + rect[2]
+		btn.anchor_bottom = rect[1] + rect[3]
+		btn.offset_left = 0
+		btn.offset_top = 0
+		btn.offset_right = 0
+		btn.offset_bottom = 0
+		btn.text = hs.get("label", "Interact")
+		btn.modulate = Color(1, 1, 1, 0.35)
+		btn.pressed.connect(_on_hotspot_pressed.bind(hs))
+		_hotspots.add_child(btn)
+
+
+func _on_hotspot_pressed(hs: Dictionary) -> void:
+	if DialogueManager.is_active:
+		return
+	if not GameState.has_flag("tutorial_seen_click"):
+		GameState.set_flag("tutorial_seen_click")
+	_last_knot = hs.get("knot", "")
+	match hs.get("type", "examine"):
+		"pickup":
+			_handle_pickup(hs)
+		"door":
+			_handle_door(hs)
+		"paper":
+			_handle_paper(hs)
+		"exit":
+			_handle_exit(hs)
+		_:
+			_start_knot(hs.get("knot", ""))
+
+
+func _handle_pickup(hs: Dictionary) -> void:
+	var hid: String = hs["id"]
+	if GameState.is_hotspot_consumed(_map_id, hid):
+		_start_knot(hs.get("empty_knot", ""))
+		return
+	var item_id: String = hs.get("item_id", "")
+	if GameState.has_item(item_id):
+		_start_knot(hs.get("empty_knot", ""))
+		return
+	_start_knot(hs.get("knot", ""))
+	GameState.add_item(item_id)
+	GameState.consume_hotspot(_map_id, hid)
+	if GameState.needs_mandatory_naming():
+		naming_required.emit()
+
+
+func _handle_door(hs: Dictionary) -> void:
+	if not GameState.has_item("keycard"):
+		_start_knot(hs.get("knot_locked", ""))
+		return
+	if GameState.needs_mandatory_naming():
+		_start_knot(hs.get("knot_need_name", ""))
+		return
+	_last_knot = hs.get("knot_exit", "")
+	_start_knot(_last_knot)
+
+
+func _handle_paper(hs: Dictionary) -> void:
+	var paper_id: String = hs.get("paper_id", "")
+	if GameState.has_read_paper(paper_id):
+		_start_knot(hs.get("empty_knot", ""))
+		return
+	_last_knot = hs.get("knot", "")
+	_start_knot(_last_knot)
+
+
+func _handle_exit(hs: Dictionary) -> void:
+	GameState.current_map_id = hs.get("target_map", _map_id)
+	_start_knot(hs.get("knot", ""))
+
+
+func _on_dialogue_ended() -> void:
+	if _map_id == "archives" and _last_knot == "archives_exit":
+		GameState.leave_archives()
+		load_map("hall_papers")
+		return
+	if _last_knot == "paper_middle" or _last_knot.begins_with("paper_"):
+		var hs_id := _hotspot_id_for_knot(_last_knot)
+		if not hs_id.is_empty():
+			var paper_id := _paper_id_from_knot(_last_knot)
+			if not paper_id.is_empty():
+				GameState.mark_paper_read(paper_id)
+				GameState.consume_hotspot(_map_id, hs_id)
+	if _encounter_pending and not GameState.has_flag("scp1_encounter_done"):
+		_encounter_pending = false
+		GameState.set_flag("scp1_encounter_done")
+		_start_knot("scp1_encounter")
+		return
+	if _last_knot == "hall_return_archives":
+		load_map(GameState.current_map_id)
+
+
+func _start_knot(knot_id: String) -> void:
+	if knot_id.is_empty():
+		return
+	_last_knot = knot_id
+	DialogueManager.start_knot(knot_id)
+
+
+func _hotspot_id_for_knot(knot: String) -> String:
+	for hs in MapRegistry.get_map(_map_id).get("hotspots", []):
+		if hs.get("knot") == knot:
+			return hs.get("id", "")
+	return ""
+
+
+func _paper_id_from_knot(knot: String) -> String:
+	match knot:
+		"paper_left":
+			return "left"
+		"paper_middle":
+			return "middle"
+		"paper_right":
+			return "right"
+	return ""
