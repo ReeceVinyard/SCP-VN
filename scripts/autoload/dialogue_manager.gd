@@ -11,6 +11,8 @@ var _knots: Dictionary = {}
 var _current_knot: String = ""
 var _line_index: int = 0
 var _pending_encounter: bool = false
+var _last_speaker: String = ""
+var _last_text: String = ""
 
 
 func _ready() -> void:
@@ -39,6 +41,8 @@ func start_knot(knot_id: String) -> void:
 	_current_knot = knot_id
 	_line_index = 0
 	_pending_encounter = false
+	_last_speaker = ""
+	_last_text = ""
 	dialogue_started.emit()
 	_show_current_line()
 
@@ -89,6 +93,8 @@ func _show_current_line() -> void:
 			encounter_triggered.emit()
 	var text: String = _substitute(str(entry.get("text", "")))
 	var speaker: String = str(entry.get("speaker", ""))
+	_last_speaker = speaker
+	_last_text = text
 	line_shown.emit(speaker, text)
 	if _pending_encounter and _line_index == lines.size() - 1:
 		_pending_encounter = false

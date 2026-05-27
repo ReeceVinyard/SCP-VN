@@ -30,28 +30,65 @@ func _build_hotspots(hotspots: Array) -> void:
 	for child in _hotspots.get_children():
 		child.queue_free()
 	for hs in hotspots:
-		var btn := Button.new()
 		var rect: Array = hs["rect"]
-		btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		btn.position = Vector2(rect[0], rect[1]) * Vector2(_hotspots.size)
-		btn.size = Vector2(rect[2], rect[3]) * Vector2(_hotspots.size)
-		btn.anchor_left = rect[0]
-		btn.anchor_top = rect[1]
-		btn.anchor_right = rect[0] + rect[2]
-		btn.anchor_bottom = rect[1] + rect[3]
-		btn.offset_left = 0
-		btn.offset_top = 0
-		btn.offset_right = 0
-		btn.offset_bottom = 0
-		btn.text = hs.get("label", "Interact")
-		btn.modulate = Color(1, 1, 1, 0.35)
-		btn.pressed.connect(_on_hotspot_pressed.bind(hs))
-		_hotspots.add_child(btn)
+		var zone := Control.new()
+		zone.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		zone.anchor_left = rect[0]
+		zone.anchor_top = rect[1]
+		zone.anchor_right = rect[0] + rect[2]
+		zone.anchor_bottom = rect[1] + rect[3]
+		zone.offset_left = 0
+		zone.offset_top = 0
+		zone.offset_right = 0
+		zone.offset_bottom = 0
+		zone.mouse_filter = Control.MOUSE_FILTER_STOP
+		zone.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		zone.tooltip_text = hs.get("label", "Interact")
+		var highlight := ColorRect.new()
+		highlight.set_anchors_preset(Control.PRESET_FULL_RECT)
+		highlight.color = Color(0.9, 0.85, 0.5, 0.12)
+		highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		zone.add_child(highlight)
+		var label := Label.new()
+		label.set_anchors_preset(Control.PRESET_FULL_RECT)
+		label.text = hs.get("label", "")
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_color_override("font_color", Color(1, 1, 1, 0.45))
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		zone.add_child(label)
+		zone.gui_input.connect(_on_hotspot_gui_input.bind(hs, highlight, zone))
+		zone.mouse_entered.connect(func() -> void: highlight.color = Color(0.9, 0.85, 0.5, 0.28))
+		zone.mouse_exited.connect(func() -> void: highlight.color = Color(0.9, 0.85, 0.5, 0.12))
+		_hotspots.add_child(zone)
+
+
+func _on_hotspot_gui_input(event: InputEvent, hs: Dictionary, highlight: ColorRect, zone: Control) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var mb := event as InputEventMouseButton
+	if not mb.pressed or mb.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if not GameState.exploration_enabled:
+		return
+	if DialogueManager.is_active:
+		# Don't stack actions — finish or skip current line first.
+		DialogueManager.advance()
+		get_viewport().set_input_as_handled()
+		return
+	zone.accept_event()
+	_flash_hotspot(highlight)
+	_on_hotspot_pressed(hs)
+
+
+func _flash_hotspot(highlight: ColorRect) -> void:
+	var tween := create_tween()
+	highlight.color = Color(1, 0.95, 0.7, 0.55)
+	tween.tween_property(highlight, "color", Color(0.9, 0.85, 0.5, 0.12), 0.35)
 
 
 func _on_hotspot_pressed(hs: Dictionary) -> void:
-	if DialogueManager.is_active:
-		return
+	get_viewport().gui_release_focus()
 	if not GameState.has_flag("tutorial_seen_click"):
 		GameState.set_flag("tutorial_seen_click")
 	_last_knot = hs.get("knot", "")
@@ -110,6 +147,7 @@ func _handle_exit(hs: Dictionary) -> void:
 
 
 func _on_dialogue_ended() -> void:
+	get_viewport().gui_release_focus()
 	if _map_id == "archives" and _last_knot == "archives_exit":
 		GameState.leave_archives()
 		load_map("hall_papers")

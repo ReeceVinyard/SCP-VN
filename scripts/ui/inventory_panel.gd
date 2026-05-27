@@ -23,22 +23,27 @@ func _refresh() -> void:
 		if GameState.selected_item_id == item_id:
 			label = "▸ " + label
 		_list.add_item(label)
-	if _list.item_count > 0:
-		_list.select(0)
-		_show_item(0)
-	else:
+	if _list.item_count == 0:
 		_description.text = "No items yet."
+		return
+	var select_index := 0
+	if not GameState.selected_item_id.is_empty():
+		select_index = GameState.inventory.find(GameState.selected_item_id)
+		if select_index < 0:
+			select_index = 0
+	_list.select(select_index)
+	_show_item(select_index, false)
 
 
 func _on_item_selected(index: int) -> void:
-	_show_item(index)
+	_show_item(index, true)
 
 
-func _show_item(index: int) -> void:
+func _show_item(index: int, update_selection: bool) -> void:
 	if index < 0:
 		_description.text = "No items yet."
 		return
 	var item_id: String = GameState.inventory[index]
 	_description.text = ItemRegistry.get_description(item_id)
-	GameState.select_item(item_id, false)
-	_list.redraw()
+	if update_selection:
+		GameState.select_item(item_id, false)

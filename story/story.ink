@@ -7,7 +7,7 @@ Your head is empty of why you're here.
 -> DONE
 
 === archives_tutorial ===
-Maybe you should look around. Things here might respond if you click them.
+Clearance registered. When you're ready, head to the security door.
 -> DONE
 
 === archives_find_id ===

@@ -1,6 +1,6 @@
 extends PanelContainer
 
-signal name_confirmed(name: String)
+signal name_confirmed(chosen_name: String)
 
 @onready var _field: LineEdit = %NameField
 @onready var _error: Label = %ErrorLabel

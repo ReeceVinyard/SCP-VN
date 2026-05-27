@@ -80,7 +80,7 @@ const MAPS := {
 			{
 				"id": "return_archives",
 				"label": "Back to Archives",
-				"rect": [0.04, 0.82, 0.1, 0.08],
+				"rect": [0.02, 0.14, 0.16, 0.09],
 				"type": "exit",
 				"target_map": "archives",
 				"knot": "hall_return_archives",
