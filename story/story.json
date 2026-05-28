@@ -4,11 +4,12 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "You awake slowly on a cold sterile marble floor. Redacted files litter the floor around you as you scramble to your knees. Your head is empty of why you're here, a blank space where your name should be."
+		  "text": "You awake slowly on a cold tile floor. the muffled wailing of alarms echo through your ears. Your vision slowly focuses and you glance around at your surroundings, desperately trying to understand where you are.
+		But when you reach for your memories, theres just a void, an appalling nothingness."
 		},
 		{
 		  "speaker": "",
-		  "text": "You should explore. Click objects in the room to examine or take them. Press I to open your inventory."
+		  "text": "Ugh, I should try and get out of here... Am i missing anything? (Press I to check your inventory)"
 		}
 	  ]
 	},
@@ -16,7 +17,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Clearance approved. When you're ready, head to the security door."
+		  "text": "Finally, I'm not sure if this is me, but it'll work, time to move on."
 		}
 	  ]
 	},
@@ -24,7 +25,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Researcher ID. The photo might be you—the name field is smudged."
+		  "text": "A Researcher ID. Is this me? The name field seems to have been charred off."
 		}
 	  ]
 	},
@@ -40,7 +41,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "The drawer is empty."
+		  "text": "There's nothing else in here save for some pens and clips."
 		}
 	  ]
 	},
@@ -56,7 +57,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Security door. You'll need a keycard to get through."
+		  "text": "Security door. I'll need a keycard to get through."
 		}
 	  ]
 	},
@@ -64,7 +65,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "The badge reader demands a registered name before it will clear you. Register yourself first."
+		  "text": "The badge reader demands a registered name before it will clear Me. I'll need to provide some form of identification first."
 		}
 	  ]
 	},
@@ -80,7 +81,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Rows of redacted binders. Someone circled a date—yesterday."
+		  "text": "Rows of redacted entries. Someone circled a date—yesterday."
 		}
 	  ]
 	},
@@ -112,7 +113,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Incident follow-up—Subject interaction logged. Appendix pages torn out. SCP---Redac--- exhibited strange, familial traits towards the scientists today."
+		  "text": "Incident follow-up—Subject interaction logged. Appendix pages torn out. [REDACTED] exhibited strange, familial traits towards the scientists today."
 		},
 		{
 		  "speaker": "???",

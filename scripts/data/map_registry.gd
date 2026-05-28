@@ -6,44 +6,7 @@ extends RefCounted
 const MAPS := {
 	"archives": {
 		"display_name": "Archives",
-		"bg_color": Color(0.12, 0.14, 0.22),
-		"hotspots": [
-			{
-				"id": "desk",
-				"label": "Desk drawer",
-				"rect": [0.62, 0.48, 0.14, 0.12],
-				"type": "pickup",
-				"item_id": "researcher_id",
-				"knot": "archives_find_id",
-				"empty_knot": "archives_desk_empty",
-			},
-			{
-				"id": "locker",
-				"label": "Locker",
-				"rect": [0.18, 0.42, 0.12, 0.22],
-				"type": "pickup",
-				"item_id": "keycard",
-				"knot": "archives_find_keycard",
-				"empty_knot": "archives_locker_empty",
-			},
-			{
-				"id": "door",
-				"label": "Security door",
-				"rect": [0.44, 0.12, 0.12, 0.28],
-				"type": "door",
-				"target_map": "hall_papers",
-				"knot_locked": "archives_door_locked",
-				"knot_need_name": "archives_need_name",
-				"knot_exit": "archives_exit",
-			},
-			{
-				"id": "shelf",
-				"label": "Redacted shelf",
-				"rect": [0.72, 0.22, 0.1, 0.35],
-				"type": "examine",
-				"knot": "archives_shelf_flavor",
-			},
-		],
+		"scene": "res://scenes/maps/archives.tscn",
 	},
 	"hall_papers": {
 		"display_name": "East corridor",

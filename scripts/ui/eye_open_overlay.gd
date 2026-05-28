@@ -3,8 +3,13 @@ extends ColorRect
 ## Full-screen black fade-out, like slowly opening your eyes.
 
 
+func _ready() -> void:
+	hide()
+
+
 func play(duration: float = 2.8) -> void:
 	modulate = Color(1, 1, 1, 1)
+	z_index = 100
 	show()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	var tween := create_tween()

@@ -1,38 +1,111 @@
 extends Control
 
+const HotspotZoneScript := preload("res://scripts/hotspot_zone.gd")
+
 signal map_changed(map_id: String)
 signal naming_required
 
-@onready var _background: ColorRect = %Background
+@onready var _bg_color: ColorRect = %BackgroundColor
+@onready var _bg_image: TextureRect = %BackgroundImage
 @onready var _map_title: Label = %MapTitle
+@onready var _map_host: Control = %MapHost
 @onready var _hotspots: Control = %Hotspots
 
 var _map_id: String = ""
 var _last_knot: String = ""
 var _encounter_pending: bool = false
+var _scene_hotspot_zones: Array = []
+var _pending_pickup: Dictionary = {}
 
 
 func _ready() -> void:
+	add_to_group("exploration_map")
 	DialogueManager.encounter_triggered.connect(func() -> void: _encounter_pending = true)
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
 
 
 func load_map(map_id: String) -> void:
 	_map_id = map_id
+	_clear_map()
 	var data: Dictionary = MapRegistry.get_map(map_id)
-	_background.color = data.get("bg_color", Color.BLACK)
 	_map_title.text = data.get("display_name", map_id)
-	_build_hotspots(data.get("hotspots", []))
+
+	if data.has("scene"):
+		_load_scene_map(data["scene"])
+	else:
+		_load_legacy_map(data)
+
 	map_changed.emit(map_id)
 
 
-func _build_hotspots(hotspots: Array) -> void:
+func _clear_map() -> void:
+	for child in _map_host.get_children():
+		child.queue_free()
 	for child in _hotspots.get_children():
 		child.queue_free()
+	_scene_hotspot_zones.clear()
+	_hotspots.visible = false
+	_map_host.visible = false
+	_bg_color.visible = true
+	_bg_image.visible = false
+
+
+func _load_scene_map(scene_path: String) -> void:
+	_bg_color.visible = false
+	_bg_image.visible = false
+	_map_host.visible = true
+	var packed: PackedScene = load(scene_path) as PackedScene
+	if packed == null:
+		push_error("Missing map scene: %s" % scene_path)
+		_bg_color.visible = true
+		return
+	var instance: Node = packed.instantiate()
+	_map_host.add_child(instance)
+	_connect_scene_hotspots(instance)
+
+
+func _load_legacy_map(data: Dictionary) -> void:
+	_bg_color.color = data.get("bg_color", Color.BLACK)
+	var texture_path: String = data.get("bg_texture", "")
+	if texture_path.is_empty():
+		_bg_image.texture = null
+		_bg_image.visible = false
+	else:
+		_bg_image.texture = load(texture_path) as Texture2D
+		_bg_image.visible = _bg_image.texture != null
+	_hotspots.visible = true
+	_build_hotspots(data.get("hotspots", []))
+
+
+func _connect_scene_hotspots(root: Node) -> void:
+	_scene_hotspot_zones = _find_hotspot_zones(root)
+	for zone in _scene_hotspot_zones:
+		zone.pressed_zone.connect(_on_scene_hotspot_pressed)
+
+
+func _find_hotspot_zones(node: Node) -> Array:
+	var found: Array = []
+	if node.get_script() == HotspotZoneScript:
+		found.append(node)
+	for child in node.get_children():
+		found.append_array(_find_hotspot_zones(child))
+	return found
+
+
+func _on_scene_hotspot_pressed(zone: Node) -> void:
+	if not GameState.exploration_enabled:
+		return
+	if DialogueManager.is_active:
+		DialogueManager.advance()
+		return
+	zone.flash_click()
+	_on_hotspot_pressed(zone.to_dictionary())
+
+
+func _build_hotspots(hotspots: Array) -> void:
 	for hs in hotspots:
 		var rect: Array = hs["rect"]
 		var zone := Control.new()
-		zone.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		zone.anchor_left = rect[0]
 		zone.anchor_top = rect[1]
 		zone.anchor_right = rect[0] + rect[2]
@@ -72,19 +145,13 @@ func _on_hotspot_gui_input(event: InputEvent, hs: Dictionary, highlight: ColorRe
 	if not GameState.exploration_enabled:
 		return
 	if DialogueManager.is_active:
-		# Don't stack actions — finish or skip current line first.
 		DialogueManager.advance()
-		get_viewport().set_input_as_handled()
 		return
 	zone.accept_event()
-	_flash_hotspot(highlight)
-	_on_hotspot_pressed(hs)
-
-
-func _flash_hotspot(highlight: ColorRect) -> void:
 	var tween := create_tween()
 	highlight.color = Color(1, 0.95, 0.7, 0.55)
 	tween.tween_property(highlight, "color", Color(0.9, 0.85, 0.5, 0.12), 0.35)
+	_on_hotspot_pressed(hs)
 
 
 func _on_hotspot_pressed(hs: Dictionary) -> void:
@@ -114,9 +181,19 @@ func _handle_pickup(hs: Dictionary) -> void:
 	if GameState.has_item(item_id):
 		_start_knot(hs.get("empty_knot", ""))
 		return
-	_start_knot(hs.get("knot", ""))
+	_pending_pickup = hs.duplicate()
 	GameState.add_item(item_id)
+
+
+func complete_pending_pickup() -> void:
+	if _pending_pickup.is_empty():
+		return
+	var hs := _pending_pickup
+	_pending_pickup = {}
+	var hid: String = hs.get("id", "")
 	GameState.consume_hotspot(_map_id, hid)
+	_last_knot = hs.get("knot", "")
+	_start_knot(_last_knot)
 	if GameState.needs_mandatory_naming():
 		naming_required.emit()
 
@@ -176,6 +253,9 @@ func _start_knot(knot_id: String) -> void:
 
 
 func _hotspot_id_for_knot(knot: String) -> String:
+	for zone in _scene_hotspot_zones:
+		if zone.knot == knot:
+			return zone.hotspot_id
 	for hs in MapRegistry.get_map(_map_id).get("hotspots", []):
 		if hs.get("knot") == knot:
 			return hs.get("id", "")
