@@ -176,64 +176,144 @@ theme_override_font_sizes/font_size = 18
 text = "Playing as: Researcher"
 vertical_alignment = 1
 
-[node name="InventoryPanel" type="PanelContainer" parent="." unique_id=968530699]
+[node name="InventoryPanel" type="Control" parent="." unique_id=968530699]
 unique_name_in_owner = true
 visible = false
+z_index = 18
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 48.0
-offset_top = -260.0
-offset_right = 460.0
-offset_bottom = 260.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("4_inventory")
 
-[node name="InvMargin" type="MarginContainer" parent="InventoryPanel" unique_id=1587656383]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+[node name="InvDim" type="ColorRect" parent="InventoryPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.03, 0.05, 0.1, 0.88)
 
-[node name="InvVBox" type="VBoxContainer" parent="InventoryPanel/InvMargin" unique_id=838405578]
+[node name="InvFrame" type="PanelContainer" parent="InventoryPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 64.0
+offset_right = -80.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InvOuterMargin" type="MarginContainer" parent="InventoryPanel/InvFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 28
+
+[node name="InvMainVBox" type="VBoxContainer" parent="InventoryPanel/InvFrame/InvOuterMargin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="InvHeaderRow" type="HBoxContainer" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox"]
 layout_mode = 2
 
-[node name="InvTitle" type="Label" parent="InventoryPanel/InvMargin/InvVBox" unique_id=1603724585]
+[node name="InvTitle" type="Label" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvHeaderRow"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 text = "Inventory"
 
-[node name="ItemList" type="ItemList" parent="InventoryPanel/InvMargin/InvVBox" unique_id=1177270490]
+[node name="InvCloseButton" type="Button" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvHeaderRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 160)
+custom_minimum_size = Vector2(140, 44)
 layout_mode = 2
+text = "Close (I)"
 
-[node name="ItemIcon" type="TextureRect" parent="InventoryPanel/InvMargin/InvVBox" unique_id=348945677]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
+[node name="InvBodyHBox" type="HBoxContainer" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 40
+
+[node name="InvListColumn" type="VBoxContainer" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="InvListLabel" type="Label" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvListColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.76, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "Items"
+
+[node name="ItemList" type="ItemList" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvListColumn" unique_id=1177270490]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+
+[node name="InvEmptyLabel" type="Label" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvListColumn"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.7, 0.74, 0.82, 1)
+theme_override_font_sizes/font_size = 18
+text = "Your bag is empty. Explore the room to find supplies."
+autowrap_mode = 3
+
+[node name="InvDetailColumn" type="VBoxContainer" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ItemIcon" type="TextureRect" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=348945677]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 360)
+layout_mode = 2
+size_flags_horizontal = 4
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DescriptionLabel" type="Label" parent="InventoryPanel/InvMargin/InvVBox" unique_id=235306691]
+[node name="InvItemName" type="Label" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Item name"
+
+[node name="DescriptionLabel" type="Label" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=235306691]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.78, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 20
 text = "No items yet."
 autowrap_mode = 3
 
-[node name="IdSwapRow" type="HBoxContainer" parent="InventoryPanel/InvMargin/InvVBox" unique_id=2044056948]
+[node name="IdSwapRow" type="HBoxContainer" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=2044056948]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="InvIdMaleButton" type="Button" parent="InventoryPanel/InvMargin/InvVBox/IdSwapRow" unique_id=311018945]
+[node name="InvIdMaleButton" type="Button" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn/IdSwapRow" unique_id=311018945]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 text = "Male ID"
 
-[node name="InvIdFemaleButton" type="Button" parent="InventoryPanel/InvMargin/InvVBox/IdSwapRow" unique_id=365200271]
+[node name="InvIdFemaleButton" type="Button" parent="InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn/IdSwapRow" unique_id=365200271]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 text = "Female ID"
 
@@ -444,71 +524,102 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_tipki")
 text = "Female ID"
 
-[node name="ItemFoundModal" type="PanelContainer" parent="."]
+[node name="ItemFoundModal" type="Control" parent="."]
 unique_name_in_owner = true
 visible = false
 z_index = 25
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -220.0
-offset_right = 280.0
-offset_bottom = 220.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("7_found")
 
-[node name="FoundMargin" type="MarginContainer" parent="ItemFoundModal"]
+[node name="FoundDim" type="ColorRect" parent="ItemFoundModal"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.03, 0.06, 0.55)
+
+[node name="FoundSlideHost" type="Control" parent="ItemFoundModal"]
+unique_name_in_owner = true
+clip_children = true
+custom_minimum_size = Vector2(920, 380)
+layout_mode = 0
+offset_right = 920.0
+offset_bottom = 380.0
+
+[node name="FoundCard" type="PanelContainer" parent="ItemFoundModal/FoundSlideHost"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FoundMargin" type="MarginContainer" parent="ItemFoundModal/FoundSlideHost/FoundCard"]
 layout_mode = 2
 theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
+theme_override_constants/margin_top = 22
 theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_bottom = 22
 
-[node name="FoundVBox" type="VBoxContainer" parent="ItemFoundModal/FoundMargin"]
+[node name="FoundHBox" type="HBoxContainer" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin"]
 layout_mode = 2
-theme_override_constants/separation = 14
-alignment = 1
+theme_override_constants/separation = 28
 
-[node name="FoundTitle" type="Label" parent="ItemFoundModal/FoundMargin/FoundVBox"]
+[node name="FoundItemIcon" type="TextureRect" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin/FoundHBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 300)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "You found"
-horizontal_alignment = 1
-
-[node name="FoundItemIcon" type="TextureRect" parent="ItemFoundModal/FoundMargin/FoundVBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 158)
-layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
 expand_mode = 1
-stretch_mode = 5
+stretch_mode = 4
 
-[node name="FoundItemName" type="Label" parent="ItemFoundModal/FoundMargin/FoundVBox"]
+[node name="FoundTextColumn" type="VBoxContainer" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin/FoundHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="FoundTitle" type="Label" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin/FoundHBox/FoundTextColumn"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
+text = "You found"
+
+[node name="FoundItemName" type="Label" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin/FoundHBox/FoundTextColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Item"
-horizontal_alignment = 1
 
-[node name="FoundDescription" type="Label" parent="ItemFoundModal/FoundMargin/FoundVBox"]
+[node name="FoundDescription" type="Label" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin/FoundHBox/FoundTextColumn"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.78, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "Description"
-horizontal_alignment = 1
 autowrap_mode = 3
+max_lines_visible = 4
 
-[node name="FoundConfirmButton" type="Button" parent="ItemFoundModal/FoundMargin/FoundVBox"]
+[node name="FoundConfirmButton" type="Button" parent="ItemFoundModal/FoundSlideHost/FoundCard/FoundMargin/FoundHBox/FoundTextColumn"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 44)
+custom_minimum_size = Vector2(200, 48)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 0
 text = "Take it"
 
 [node name="EyeOpenOverlay" type="ColorRect" parent="." unique_id=403477871]

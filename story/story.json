@@ -142,7 +142,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Only ash remains."
+		  "text": "There's nothing else interesting here."
 		}
 	  ]
 	},
@@ -151,6 +151,30 @@
 		{
 		  "speaker": "",
 		  "text": "The archives feel safer than the corridor."
+		}
+	  ]
+	},
+	"door_l_far_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Labs 12–21. The card reader is dark—whatever happened here, no one left this wing on schedule."
+		}
+	  ]
+	},
+	"door_r_far_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Labs 22–31. A faint chemical tang seeps under the door. Nothing good waits on the other side."
+		}
+	  ]
+	},
+	"door_r_close_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Another sealed lab door. The handle is warm, as if something pressed against it from within."
 		}
 	  ]
 	},

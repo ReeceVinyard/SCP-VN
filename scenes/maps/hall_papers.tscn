@@ -1,0 +1,200 @@
+[gd_scene format=3 uid="uid://t2tubbfapw2w"]
+
+[ext_resource type="Texture2D" uid="uid://buprrb6v0i0po" path="res://assets/backgrounds/corridor2.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://co1hv4jns1u" path="res://scripts/hotspot_zone.gd" id="2_hotspot"]
+[ext_resource type="Script" uid="uid://6k81uajqec4" path="res://scripts/maps/interactable_overlay_layer.gd" id="3_overlays"]
+
+[node name="HallPapersMap" type="Control" unique_id=1766001283]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="." unique_id=167093881]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="InteractableOverlays" type="Control" parent="." unique_id=1522928111]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_overlays")
+map_id = "hall_papers"
+
+[node name="Hotspots" type="Control" parent="." unique_id=508468953]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="PaperLeft" type="Control" parent="Hotspots" unique_id=344193419]
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.74
+anchor_right = 0.24
+anchor_bottom = 0.93
+offset_left = 347.00018
+offset_top = 151.79999
+offset_right = 347.00006
+offset_bottom = 151.79993
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.37332538
+scale = Vector2(0.495951, 0.27581993)
+tooltip_text = "Paper (left)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "paper_left"
+label_text = "Paper (left)"
+interaction_type = "paper"
+knot = "paper_left"
+empty_knot = "paper_left_done"
+paper_id = "left"
+
+[node name="PaperMiddle" type="Control" parent="Hotspots" unique_id=527617442]
+layout_mode = 1
+anchor_left = 0.38
+anchor_top = 0.73
+anchor_right = 0.58
+anchor_bottom = 0.93
+offset_left = 129.40002
+offset_top = 109.60004
+offset_right = 129.40051
+offset_bottom = 109.599976
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.39266166
+scale = Vector2(0.49600703, 0.3839793)
+tooltip_text = "Paper (center)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "paper_middle"
+label_text = "Paper (center)"
+interaction_type = "paper"
+knot = "paper_middle"
+empty_knot = "paper_middle_done"
+paper_id = "middle"
+
+[node name="PaperRight" type="Control" parent="Hotspots" unique_id=1381707002]
+layout_mode = 1
+anchor_left = 0.74
+anchor_top = 0.74
+anchor_right = 0.94
+anchor_bottom = 0.93
+offset_left = -24.800049
+offset_top = 76.79999
+offset_right = -24.800049
+offset_bottom = 76.79993
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.56257224
+scale = Vector2(0.4255708, 0.3194875)
+tooltip_text = "Paper (right)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "paper_right"
+label_text = "Paper (right)"
+interaction_type = "paper"
+knot = "paper_right"
+empty_knot = "paper_right_done"
+paper_id = "right"
+
+[node name="DoorLClose" type="Control" parent="Hotspots" unique_id=792603559]
+layout_mode = 1
+anchor_top = 0.14
+anchor_right = 0.2
+anchor_bottom = 0.88
+offset_left = 83.0
+offset_top = 0.80000305
+offset_right = 83.0
+offset_bottom = 0.7999878
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5743713, 0.9764908)
+tooltip_text = "Back to Archives"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "return_archives"
+label_text = "Back to Archives"
+interaction_type = "exit"
+knot = "hall_return_archives"
+target_map = "archives"
+
+[node name="DoorLFar" type="Control" parent="Hotspots" unique_id=2105333825]
+layout_mode = 1
+anchor_left = 0.06
+anchor_top = 0.2
+anchor_right = 0.22
+anchor_bottom = 0.52
+offset_left = 345.8
+offset_top = 52.0
+offset_right = 345.80002
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.35201907, 1.4575188)
+tooltip_text = "Door (labs 12–21)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door_l_far"
+label_text = "Door (labs 12–21)"
+knot = "door_l_far_flavor"
+
+[node name="DoorRFar" type="Control" parent="Hotspots" unique_id=1001638849]
+layout_mode = 1
+anchor_left = 0.78
+anchor_top = 0.2
+anchor_right = 0.94
+anchor_bottom = 0.52
+offset_left = -144.6001
+offset_top = 64.0
+offset_right = -144.6001
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.049583007
+scale = Vector2(0.31016752, 1.3207552)
+tooltip_text = "Door (labs 22–31)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door_r_far"
+label_text = "Door (labs 22–31)"
+knot = "door_r_far_flavor"
+
+[node name="DoorRClose" type="Control" parent="Hotspots" unique_id=277096678]
+layout_mode = 1
+anchor_left = 0.8
+anchor_top = 0.14
+anchor_right = 1.0
+anchor_bottom = 0.88
+offset_left = 63.000122
+offset_top = -18.199997
+offset_right = 63.000122
+offset_bottom = -18.200012
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6096963, 0.9595523)
+tooltip_text = "Door (right)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door_r_close"
+label_text = "Door (right)"
+knot = "door_r_close_flavor"

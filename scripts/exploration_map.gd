@@ -254,10 +254,10 @@ func _start_knot(knot_id: String) -> void:
 
 func _hotspot_id_for_knot(knot: String) -> String:
 	for zone in _scene_hotspot_zones:
-		if zone.knot == knot:
+		if zone.knot == knot or zone.empty_knot == knot:
 			return zone.hotspot_id
 	for hs in MapRegistry.get_map(_map_id).get("hotspots", []):
-		if hs.get("knot") == knot:
+		if hs.get("knot") == knot or hs.get("empty_knot") == knot:
 			return hs.get("id", "")
 	return ""
 

@@ -11,6 +11,15 @@ const MAP_OVERLAYS := {
 		"door_keypad_unlocked": "res://assets/Interactables/lab1_keypad_green.png",
 		"shelf": "res://assets/Interactables/lab1_notebook.png",
 	},
+	"hall_papers": {
+		"paper_left": "res://assets/Interactables/corridor2_paper_L.png",
+		"paper_middle": "res://assets/Interactables/corridor2_paper_mid.png",
+		"paper_right": "res://assets/Interactables/corridor2_paper_R.png",
+		"return_archives": "res://assets/Interactables/corridor2_door_L_close.png",
+		"door_l_far": "res://assets/Interactables/corridor2_door_L_far.png",
+		"door_r_close": "res://assets/Interactables/corridor2_door_R_close.png",
+		"door_r_far": "res://assets/Interactables/corridor2_door_R_far.png",
+	},
 }
 
 ## Overlay keys that layer on top of a hotspot (not separate interactables).

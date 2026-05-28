@@ -3,9 +3,9 @@ extends Control
 @onready var _exploration: Control = %ExplorationMap
 @onready var _map_host: Control = %MapHost
 @onready var _dialogue_box: PanelContainer = %DialogueBox
-@onready var _inventory: PanelContainer = %InventoryPanel
+@onready var _inventory: Control = %InventoryPanel
 @onready var _name_modal: Control = %NameEntryModal
-@onready var _item_found_modal: PanelContainer = %ItemFoundModal
+@onready var _item_found_modal: Control = %ItemFoundModal
 @onready var _inventory_button: Button = %InventoryButton
 @onready var _status_label: Label = %StatusLabel
 @onready var _eye_overlay: ColorRect = %EyeOpenOverlay
@@ -45,7 +45,9 @@ func _start_opening_sequence() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _item_found_modal.visible:
+	if _item_found_modal.visible or _name_modal.visible:
+		return
+	if _inventory.visible:
 		return
 	if event.is_action_pressed("ui_inventory"):
 		_inventory.toggle()
