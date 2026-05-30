@@ -3,8 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://buprrb6v0i0po" path="res://assets/backgrounds/corridor2.png" id="1_bg"]
 [ext_resource type="Script" uid="uid://co1hv4jns1u" path="res://scripts/hotspot_zone.gd" id="2_hotspot"]
 [ext_resource type="Script" uid="uid://6k81uajqec4" path="res://scripts/maps/interactable_overlay_layer.gd" id="3_overlays"]
+[ext_resource type="Script" uid="uid://bq51id45y1wx6" path="res://scripts/maps/map_editor_canvas.gd" id="4_canvas"]
+[ext_resource type="Script" uid="uid://bsnh002cr4dej" path="res://scripts/maps/character_presence_zone.gd" id="5_chase"]
+[ext_resource type="Texture2D" uid="uid://dexbgj18c506m" path="res://assets/Characters/Chase/chase.png" id="6_chase_tex"]
 
 [node name="HallPapersMap" type="Control" unique_id=1766001283]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +16,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("4_canvas")
 
 [node name="Background" type="TextureRect" parent="." unique_id=167093881]
 layout_mode = 1
@@ -23,7 +28,6 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("1_bg")
 expand_mode = 1
-stretch_mode = 6
 
 [node name="InteractableOverlays" type="Control" parent="." unique_id=1522928111]
 layout_mode = 1
@@ -36,6 +40,37 @@ mouse_filter = 2
 script = ExtResource("3_overlays")
 map_id = "hall_papers"
 
+[node name="ChaseAtDoor" type="Control" parent="InteractableOverlays" unique_id=1199507289]
+z_index = 30
+layout_mode = 1
+anchor_left = 0.52
+anchor_top = 0.08
+anchor_right = 0.98
+anchor_bottom = 1.0
+offset_left = -600.39996
+offset_top = -145.4
+offset_right = -600.3999
+offset_bottom = -145.40002
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1.2270373, 1.2156878)
+mouse_filter = 2
+script = ExtResource("5_chase")
+
+[node name="Sprite" type="TextureRect" parent="InteractableOverlays/ChaseAtDoor" unique_id=1382664374]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_chase_tex")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Hotspots" type="Control" parent="." unique_id=508468953]
 layout_mode = 1
 anchors_preset = 15
@@ -47,18 +82,12 @@ mouse_filter = 1
 
 [node name="PaperLeft" type="Control" parent="Hotspots" unique_id=344193419]
 layout_mode = 1
-anchor_left = 0.05
-anchor_top = 0.74
-anchor_right = 0.24
-anchor_bottom = 0.93
-offset_left = 347.00018
-offset_top = 151.79999
-offset_right = 347.00006
-offset_bottom = 151.79993
-grow_horizontal = 2
-grow_vertical = 2
-rotation = -0.37332538
-scale = Vector2(0.495951, 0.27581993)
+anchor_left = 0.2172
+anchor_top = 0.8343
+anchor_right = 0.3313
+anchor_bottom = 0.9186
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Paper (left)"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
@@ -71,18 +100,12 @@ paper_id = "left"
 
 [node name="PaperMiddle" type="Control" parent="Hotspots" unique_id=527617442]
 layout_mode = 1
-anchor_left = 0.38
-anchor_top = 0.73
-anchor_right = 0.58
-anchor_bottom = 0.93
-offset_left = 129.40002
-offset_top = 109.60004
-offset_right = 129.40051
-offset_bottom = 109.599976
-grow_horizontal = 2
-grow_vertical = 2
-rotation = 0.39266166
-scale = Vector2(0.49600703, 0.3839793)
+anchor_left = 0.4349
+anchor_top = 0.8546
+anchor_right = 0.5464
+anchor_bottom = 0.9527
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Paper (center)"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
@@ -95,18 +118,12 @@ paper_id = "middle"
 
 [node name="PaperRight" type="Control" parent="Hotspots" unique_id=1381707002]
 layout_mode = 1
-anchor_left = 0.74
-anchor_top = 0.74
-anchor_right = 0.94
-anchor_bottom = 0.93
-offset_left = -24.800049
-offset_top = 76.79999
-offset_right = -24.800049
-offset_bottom = 76.79993
-grow_horizontal = 2
-grow_vertical = 2
-rotation = 0.56257224
-scale = Vector2(0.4255708, 0.3194875)
+anchor_left = 0.6917
+anchor_top = 0.8389
+anchor_right = 0.811
+anchor_bottom = 0.9287
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Paper (right)"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
@@ -119,16 +136,12 @@ paper_id = "right"
 
 [node name="DoorLClose" type="Control" parent="Hotspots" unique_id=792603559]
 layout_mode = 1
-anchor_top = 0.14
-anchor_right = 0.2
-anchor_bottom = 0.88
-offset_left = 83.0
-offset_top = 0.80000305
-offset_right = 83.0
-offset_bottom = 0.7999878
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5743713, 0.9764908)
+anchor_left = 0.0375
+anchor_top = 0.0481
+anchor_right = 0.1667
+anchor_bottom = 0.924
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Back to Archives"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
@@ -140,17 +153,12 @@ target_map = "archives"
 
 [node name="DoorLFar" type="Control" parent="Hotspots" unique_id=2105333825]
 layout_mode = 1
-anchor_left = 0.06
-anchor_top = 0.2
-anchor_right = 0.22
-anchor_bottom = 0.52
-offset_left = 345.8
-offset_top = 52.0
-offset_right = 345.80002
-offset_bottom = 52.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.35201907, 1.4575188)
+anchor_left = 0.2427
+anchor_top = 0.2241
+anchor_right = 0.3021
+anchor_bottom = 0.7222
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Door (labs 12–21)"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
@@ -160,18 +168,12 @@ knot = "door_l_far_flavor"
 
 [node name="DoorRFar" type="Control" parent="Hotspots" unique_id=1001638849]
 layout_mode = 1
-anchor_left = 0.78
-anchor_top = 0.2
-anchor_right = 0.94
-anchor_bottom = 0.52
-offset_left = -144.6001
-offset_top = 64.0
-offset_right = -144.6001
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-rotation = 0.049583007
-scale = Vector2(0.31016752, 1.3207552)
+anchor_left = 0.6937
+anchor_top = 0.2241
+anchor_right = 0.7531
+anchor_bottom = 0.7222
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Door (labs 22–31)"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
@@ -181,17 +183,12 @@ knot = "door_r_far_flavor"
 
 [node name="DoorRClose" type="Control" parent="Hotspots" unique_id=277096678]
 layout_mode = 1
-anchor_left = 0.8
-anchor_top = 0.14
-anchor_right = 1.0
-anchor_bottom = 0.88
-offset_left = 63.000122
-offset_top = -18.199997
-offset_right = 63.000122
-offset_bottom = -18.200012
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.6096963, 0.9595523)
+anchor_left = 0.8281
+anchor_top = 0.0333
+anchor_right = 0.9573
+anchor_bottom = 0.9203
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "Door (right)"
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")

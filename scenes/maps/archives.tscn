@@ -3,8 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://bsn5sqhas2te7" path="res://assets/backgrounds/archives.png" id="1_bg"]
 [ext_resource type="Script" uid="uid://co1hv4jns1u" path="res://scripts/hotspot_zone.gd" id="2_hotspot"]
 [ext_resource type="Script" uid="uid://6k81uajqec4" path="res://scripts/maps/interactable_overlay_layer.gd" id="3_overlays"]
+[ext_resource type="Script" uid="uid://bq51id45y1wx6" path="res://scripts/maps/map_editor_canvas.gd" id="4_canvas"]
 
 [node name="ArchivesMap" type="Control" unique_id=1604183146]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("4_canvas")
 
 [node name="Background" type="TextureRect" parent="." unique_id=341919814]
 layout_mode = 1
@@ -23,7 +26,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("1_bg")
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 0
 
 [node name="InteractableOverlays" type="Control" parent="." unique_id=347543125]
 layout_mode = 1
@@ -34,6 +37,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("3_overlays")
+map_id = "archives"
 
 [node name="Hotspots" type="Control" parent="." unique_id=1151396168]
 layout_mode = 1
@@ -46,18 +50,12 @@ mouse_filter = 1
 
 [node name="Desk" type="Control" parent="Hotspots" unique_id=1426623479]
 layout_mode = 1
-anchor_left = 0.62
-anchor_top = 0.48
-anchor_right = 0.76
-anchor_bottom = 0.6
-offset_left = -721.4
-offset_top = 245.60004
-offset_right = -721.4
-offset_bottom = 245.60004
-grow_horizontal = 2
-grow_vertical = 2
-rotation = -0.32171488
-scale = Vector2(0.7131152, 0.40199953)
+anchor_left = 0.2484
+anchor_top = 0.6519
+anchor_right = 0.3536
+anchor_bottom = 0.7602
+grow_horizontal = 0
+grow_vertical = 0
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
 hotspot_id = "desk"
@@ -69,17 +67,12 @@ item_id = "researcher_id"
 
 [node name="Locker" type="Control" parent="Hotspots" unique_id=1753749123]
 layout_mode = 1
-anchor_left = 0.18
-anchor_top = 0.42
-anchor_right = 0.3
-anchor_bottom = 0.64
-offset_left = 1186.4
-offset_top = -200.59998
-offset_right = 1186.4
-offset_bottom = -200.59998
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5599951, 2.24)
+anchor_left = 0.7875
+anchor_top = 0.212
+anchor_right = 0.8792
+anchor_bottom = 0.7722
+grow_horizontal = 0
+grow_vertical = 0
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
 hotspot_id = "locker"
@@ -91,17 +84,12 @@ item_id = "keycard"
 
 [node name="Door" type="Control" parent="Hotspots" unique_id=885175081]
 layout_mode = 1
-anchor_left = 0.44
-anchor_top = 0.12
-anchor_right = 0.56
-anchor_bottom = 0.4
-offset_left = 145.20001
-offset_top = 133.40001
-offset_right = 145.19995
-offset_bottom = 133.40002
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1, 1.64)
+anchor_left = 0.5005
+anchor_top = 0.2269
+anchor_right = 0.6432
+anchor_bottom = 0.7287
+grow_horizontal = 0
+grow_vertical = 0
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
 hotspot_id = "door"
@@ -114,20 +102,98 @@ knot_exit = "archives_exit"
 
 [node name="Shelf" type="Control" parent="Hotspots" unique_id=1733228988]
 layout_mode = 1
-anchor_left = 0.72
-anchor_top = 0.22
-anchor_right = 0.82
-anchor_bottom = 0.57
-offset_left = -67.400024
-offset_top = 634.3999
-offset_right = -67.400024
-offset_bottom = 634.3999
-grow_horizontal = 2
-grow_vertical = 2
-rotation = 0.103226565
-scale = Vector2(1.2932622, 0.29494682)
+anchor_left = 0.6661
+anchor_top = 0.8102
+anchor_right = 0.825
+anchor_bottom = 0.9546
+grow_horizontal = 0
+grow_vertical = 0
 mouse_default_cursor_shape = 2
 script = ExtResource("2_hotspot")
 hotspot_id = "shelf"
 label_text = "Redacted shelf"
 knot = "archives_shelf_flavor"
+
+[node name="Clock" type="Control" parent="Hotspots" unique_id=776456821]
+layout_mode = 1
+anchor_left = 0.5167
+anchor_top = 0.1713
+anchor_right = 0.6271
+anchor_bottom = 0.2185
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "clock"
+label_text = "Clock"
+knot = "archives_clock_flavor"
+
+[node name="Biohazard" type="Control" parent="Hotspots" unique_id=680893431]
+layout_mode = 1
+anchor_left = 0.8182
+anchor_top = 0.1398
+anchor_right = 0.8594
+anchor_bottom = 0.2167
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "biohazard"
+label_text = "Biohazard container"
+knot = "archives_biohazard_flavor"
+
+[node name="Beakers" type="Control" parent="Hotspots" unique_id=1550627084]
+layout_mode = 1
+anchor_left = 0.0125
+anchor_top = 0.4009
+anchor_right = 0.0766
+anchor_bottom = 0.5704
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "beakers"
+label_text = "Beakers"
+knot = "archives_beakers_flavor"
+
+[node name="Bottles" type="Control" parent="Hotspots" unique_id=310964909]
+layout_mode = 1
+anchor_left = 0.2281
+anchor_top = 0.1574
+anchor_right = 0.2943
+anchor_bottom = 0.275
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "bottles"
+label_text = "Chemical bottles"
+knot = "archives_bottles_flavor"
+
+[node name="PeriodicTable" type="Control" parent="Hotspots" unique_id=353955096]
+layout_mode = 1
+anchor_left = 0.3057
+anchor_top = 0.2185
+anchor_right = 0.3823
+anchor_bottom = 0.4407
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "periodic_table"
+label_text = "Periodic table"
+knot = "archives_periodic_table_flavor"
+
+[node name="Trash" type="Control" parent="Hotspots" unique_id=114582555]
+layout_mode = 1
+anchor_left = 0.8875
+anchor_top = 0.612
+anchor_right = 0.9688
+anchor_bottom = 0.7676
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "trash"
+label_text = "Trash can"
+knot = "archives_trash_flavor"

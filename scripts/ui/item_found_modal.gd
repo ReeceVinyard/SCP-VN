@@ -36,7 +36,7 @@ func show_item(item_id: String) -> void:
 	_busy = true
 	_populate(item_id)
 	_exploration_was_enabled = GameState.exploration_enabled
-	GameState.exploration_enabled = false
+	GameState.disable_exploration()
 	_confirm.disabled = true
 	_dim.modulate.a = 0.0
 	_slide_host.modulate.a = 1.0
@@ -109,7 +109,10 @@ func _play_slide_out() -> void:
 func _finish_dismiss() -> void:
 	hide()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	GameState.exploration_enabled = _exploration_was_enabled
+	if _exploration_was_enabled:
+		GameState.enable_exploration()
+	else:
+		GameState.disable_exploration()
 	_busy = false
 	confirmed.emit()
 

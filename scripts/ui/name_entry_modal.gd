@@ -46,6 +46,8 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_empty_style = StyleBoxEmpty.new()
 	_build_swap_styles()
+	if not _ensure_swap_buttons():
+		return
 	_setup_swap_buttons()
 	_apply_card_input_style()
 	_confirm.pressed.connect(_submit)
@@ -121,6 +123,15 @@ func _on_id_clicked(event: InputEvent) -> void:
 func _on_name_typed(_new_text: String) -> void:
 	_error.text = ""
 	_target_name = _field.text
+
+
+func _ensure_swap_buttons() -> bool:
+	if _male_button != null and _female_button != null:
+		return true
+	push_error(
+		"IdMaleButton/IdFemaleButton missing — check ModalLayer/NameEntryModal paths in main.tscn"
+	)
+	return false
 
 
 func _setup_swap_buttons() -> void:

@@ -12,6 +12,10 @@ const MAPS := {
 		"display_name": "East corridor",
 		"scene": "res://scenes/maps/hall_papers.tscn",
 	},
+	"corridor_forward": {
+		"display_name": "Corridor 3",
+		"scene": "res://scenes/maps/corridor_forward.tscn",
+	},
 }
 
 

@@ -71,6 +71,8 @@ The project is now ready. You do **not** need to install anything else (no Node,
 | **Mouse click** | Interact with highlighted areas in the room |
 | **Click / Enter** | Advance dialogue when text is on screen |
 | **I** | Open or close inventory |
+| **F6** / **Save** button | Quick save (full progress) |
+| **F9** / **Load** button | Quick load last save |
 
 **Suggested play order:**
 
@@ -110,6 +112,20 @@ If you are stuck, send Reece a screenshot of the Godot **Output** panel (bottom 
 - [Godot 4.3+](https://godotengine.org/download)
 - Optional: [Inky](https://github.com/inkle/inky) for editing `story/story.ink`
 
+### Save / load (playtesting)
+
+Quick save writes to `user://saves/quick_save.json` (see Godot **User data** path in the editor). Each save stores:
+
+- **All story flags** (every choice in `GameState.FLAG_DEFAULTS`: Chase branch, papers read, door state, etc.)
+- **Inventory** (items + ID male/female variant + selected item)
+- **Current map**, consumed hotspots, player name, exploration state
+- **In-progress pickup** if you saved mid item-found modal
+- **Active dialogue** (knot, line, choices, or pending NPC reaction) — including mid–Chase sequence
+
+**F9** / **Load** restores the room, overlays, and flags so you can jump back to a beat without replaying from the intro. The opening eye cinematic is skipped when loading a save that has already passed it.
+
+When you add a new flag to `game_state.gd` `FLAG_DEFAULTS`, it is included automatically in future saves.
+
 ### Run locally
 
 1. Open Godot → **Import** → select this folder’s `project.godot`
@@ -130,7 +146,8 @@ If you are stuck, send Reece a screenshot of the Godot **Output** panel (bottom 
 ```
 scenes/main.tscn           # Root UI
 scenes/maps/archives.tscn  # Archives room
-scenes/maps/hall_papers.tscn # East corridor (papers + doors)
+scenes/maps/hall_papers.tscn # Corridor 2 (papers + doors)
+scenes/maps/corridor_forward.tscn # Corridor 3 (vents, sign, camera, doors)
 scripts/hotspot_zone.gd    # Per-clickable-area script
 scripts/autoload/          # GameState, DialogueManager
 scripts/data/              # Maps, items, interactable overlays
@@ -142,10 +159,34 @@ assets/Interactables/      # Full-screen hover overlay art
 
 ### Editing clickable areas
 
-1. Open **`scenes/maps/archives.tscn`** or **`scenes/maps/hall_papers.tscn`**
-2. Under **Hotspots**, select a zone and resize it in the 2D viewport
-3. Set fields in the **Inspector** (type, knots, `paper_id`, `target_map`, etc.)
-4. Toggle **Show Zone In Editor** for cyan debug boxes
+Hover glow uses full-screen overlay PNGs in `assets/Interactables/` (1920×1080). **Clicks follow the cyan box**, which should match the opaque pixels in that overlay—not a rough guess on the background.
+
+1. Open **`scenes/maps/archives.tscn`** (or `hall_papers.tscn`). Root has **Map Editor Canvas** (1920×1080 min size).
+2. Select **ArchivesMap** / **HallPapersMap** → **Fit ALL hotspots to overlay art** (reads bounds from `InteractableRegistry.OVERLAY_HIT_RECTS`).
+3. Per zone: **Fit to overlay art** for one object; **Snap click box to anchors** if offsets/scale crept in (red outline = misaligned).
+4. At runtime, zones with overlay art also use **alpha hit-testing** inside the box (only non-transparent pixels click).
+5. Maps play inside a **16:9 aspect wrapper** so anchors stay aligned with art when the window is resized.
+
+To add a new object: drop a `lab1_*.png` overlay, add paths + `OVERLAY_HIT_RECTS` in `scripts/data/interactable_registry.gd` (opaque bbox at 1920×1080), then fit the hotspot.
+
+Chase appears on **`HallPapersMap → InteractableOverlays → ChaseAtDoor`** (not a runtime-only node). Open `scenes/maps/hall_papers.tscn`, select **ChaseAtDoor**, and resize/move with anchor handles. Toggle **Show In Editor** to preview art while editing. Mood swaps (`chase.png` / `chase_angry.png` / `chase_scared.png`) still apply at runtime via `chase_at_door` in `interactable_registry.gd`.
+
+### UI draw order (CanvasLayers)
+
+Defined in `scripts/ui/ui_layers.gd` and applied in `scenes/main.tscn`:
+
+| Layer | Contents |
+|-------|----------|
+| **0 World** | Maps, Chase / character presence, exploration |
+| **5 HUD** | Inventory button, status |
+| **10 Dialogue** | Dialogue box |
+| **20 Choices** | Choice dim + buttons (characters stay visible **behind** this layer) |
+| **30 Modals** | Reactions, documents, naming |
+| **100 Cinematic** | Opening eye overlay |
+
+New UI should use the appropriate `CanvasLayer` so it never fights map characters.
+
+Story line tags: `"tags": ["shake:light"]` / `shake:medium` / `shake:heavy` for screen shake.
 
 Overlay PNG mappings: `scripts/data/interactable_registry.gd`
 

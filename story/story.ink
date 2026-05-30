@@ -56,9 +56,9 @@ You've already read this memo.
 
 === paper_middle ===
 Incident follow-up: Subject interaction logged—appendix missing—
-// TAG: trigger:scp1_encounter on line 2 in JSON
-Something cold brushes the back of your neck.
--> scp1_encounter
+You find form EH-14 beneath the page—dense, legible if you take time to read it.
+// Document reader opens from exploration_map; Chase starts after you finish reading.
+-> DONE
 
 === paper_middle_done ===
 Scorch marks where the paper lay. Whatever happened, it left.
@@ -76,23 +76,47 @@ The roster is gone. Only ash.
 The archives feel safer than whatever is out here.
 -> DONE
 
+=== chase_arrival ===
+Chase appears—haggard, armed, out of breath. You are both surprised.
+-> chase_evacuation
+
+=== chase_evacuation ===
+Chase: Wait—what? Why are you still here? Evac started thirty minutes ago!
+* [Tell him you woke with no memory.]
+    -> chase_amnesia_response
+* [Blame a lost keycard in the Archives.]
+    -> chase_lie_response
+
+=== chase_amnesia_response ===
+You confess the blank in your memory. Chase believes you—something failed in the labs.
+-> chase_guide_gentle
+
+=== chase_lie_response ===
+You lie about the keycard. Chase scolds you—breach, dead staff, move now.
+-> chase_guide_harsh
+
+=== chase_guide_gentle ===
+Chase explains the facility is unsafe and points to the open forward door.
+-> DONE
+
+=== chase_guide_harsh ===
+Chase warns you harshly and orders you through the open door.
+-> DONE
+
+=== hall_forward_enter ===
+You follow Chase into the next wing.
+-> DONE
+
+// SCP encounter reserved for after the Chase sequence (see story.json).
+
 === scp1_encounter ===
-{ missing_researcher_id:
-  A shape in the corner. It tilts toward you, curious—and measuring.
-- else:
-  A shape in the corner. It hesitates at your badge name.
-}
-* [Stay calm. Speak softly.]
-  -> scp1_befriend
-* [Back away quickly.]
-  -> scp1_hostile
-* [Offer the notes you gathered] { paper_left_read or paper_right_read }
-  -> scp1_befriend
+(Reserved.)
+-> DONE
 
 === scp1_befriend ===
-It stills. For now, you think it understands.
+(Reserved.)
 -> DONE
 
 === scp1_hostile ===
-It recoils—or bristles. You'll hear from it again, and not kindly.
+(Reserved.)
 -> DONE

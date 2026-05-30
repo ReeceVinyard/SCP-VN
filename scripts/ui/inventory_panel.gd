@@ -11,7 +11,10 @@ const ICON_MIN_SIZE := Vector2(560, 360)
 @onready var _male_button: Button = %InvIdMaleButton
 @onready var _female_button: Button = %InvIdFemaleButton
 @onready var _close_button: Button = %InvCloseButton
+@onready var _read_button: Button = %InvReadButton
 @onready var _empty_label: Label = %InvEmptyLabel
+
+signal read_document_requested(item_id: String)
 
 var _exploration_was_enabled: bool = false
 
@@ -28,6 +31,7 @@ func _ready() -> void:
 	_male_button.pressed.connect(func() -> void: GameState.set_id_variant("male"))
 	_female_button.pressed.connect(func() -> void: GameState.set_id_variant("female"))
 	_close_button.pressed.connect(close)
+	_read_button.pressed.connect(_on_read_pressed)
 
 
 func toggle() -> void:
@@ -41,7 +45,7 @@ func open() -> void:
 	if visible or not GameState.exploration_enabled:
 		return
 	_exploration_was_enabled = GameState.exploration_enabled
-	GameState.exploration_enabled = false
+	GameState.disable_exploration()
 	_dim.modulate.a = 1.0
 	show()
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -54,7 +58,10 @@ func close() -> void:
 		return
 	hide()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	GameState.exploration_enabled = _exploration_was_enabled
+	if _exploration_was_enabled:
+		GameState.enable_exploration()
+	else:
+		GameState.disable_exploration()
 
 
 func _refresh() -> void:
@@ -85,6 +92,7 @@ func _show_empty() -> void:
 	_icon.texture = null
 	_icon.visible = false
 	_swap_row.visible = false
+	_read_button.visible = false
 
 
 func _on_item_selected(index: int) -> void:
@@ -107,11 +115,22 @@ func _show_item(index: int, update_selection: bool) -> void:
 		_icon.visible = _icon.texture != null
 	var show_swap := item_id == "researcher_id" and GameState.can_swap_id_variant()
 	_swap_row.visible = show_swap
+	_read_button.visible = ItemRegistry.is_readable_document(item_id)
 	if show_swap:
 		_apply_swap_style(_male_button, GameState.id_variant == "male", "Male ID")
 		_apply_swap_style(_female_button, GameState.id_variant == "female", "Female ID")
 	if update_selection:
 		GameState.select_item(item_id, false)
+
+
+func _on_read_pressed() -> void:
+	var index := _list.get_selected_items()
+	if index.is_empty():
+		return
+	var item_id: String = GameState.inventory[index[0]]
+	if not ItemRegistry.is_readable_document(item_id):
+		return
+	read_document_requested.emit(item_id)
 
 
 func _apply_swap_style(btn: Button, selected: bool, label: String) -> void:

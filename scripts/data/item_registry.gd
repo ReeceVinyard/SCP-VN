@@ -14,7 +14,17 @@ const ITEMS := {
 		"description": "Facility keycard. It still works—for now.",
 		"icon": "res://assets/items/LEVEL_2_KEYCARD.png",
 	},
+	"eh_14": {
+		"display_name": "EH-14 Incident Appendix",
+		"description": "Redacted incident follow-up—subject interaction logged. Appendix pages torn out.",
+		"icon": "res://assets/items/EH-14.png",
+		"readable": true,
+	},
 }
+
+
+static func is_readable_document(item_id: String) -> bool:
+	return bool(ITEMS.get(item_id, {}).get("readable", false))
 
 
 static func get_display_name(item_id: String) -> String:

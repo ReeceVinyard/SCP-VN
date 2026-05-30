@@ -4,8 +4,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "You awake slowly on a cold tile floor. the muffled wailing of alarms echo through your ears. Your vision slowly focuses and you glance around at your surroundings, desperately trying to understand where you are.
-		But when you reach for your memories, theres just a void, an appalling nothingness."
+		  "text": "You awake slowly on a cold tile floor. The muffled wailing of alarms echo through your ears. Your vision slowly focuses and you glance around at your surroundings, desperately trying to understand where you are. But when you reach for your memories, there's just a void—an appalling nothingness."
 		},
 		{
 		  "speaker": "",
@@ -85,6 +84,54 @@
 		}
 	  ]
 	},
+	"archives_clock_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The clock above the door has stopped. 04:23... Just how long was I out for?"
+		}
+	  ]
+	},
+	"archives_biohazard_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A biohazard container sits sealed and labeled. It seems to be empty, thankfully."
+		}
+	  ]
+	},
+	"archives_beakers_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The substance in it looks viscous. Maybe it's gone bad."
+		}
+	  ]
+	},
+	"archives_bottles_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Smaller bottles cluster together All labeled with substances that I can't recall the importance of."
+		}
+	  ]
+	},
+	"archives_periodic_table_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A periodic table of elements hangs crooked on the wall. There seems to be 121 elements now."
+		}
+	  ]
+	},
+	"archives_trash_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "This was a rubbish idea, why am I digging through trash?"
+		}
+	  ]
+	},
 	"hall_enter": {
 	  "lines": [
 		{
@@ -116,9 +163,8 @@
 		  "text": "Incident follow-up—Subject interaction logged. Appendix pages torn out. [REDACTED] exhibited strange, familial traits towards the scientists today."
 		},
 		{
-		  "speaker": "???",
-		  "text": "You've barely started the next line before you feel the cold chill of something coiling it's way around your neck.",
-		  "tags": ["trigger:scp1_encounter"]
+		  "speaker": "",
+		  "text": "Beneath it lies a heavier sheet—form EH-14. The text is dense, but legible if you take the time to read it."
 		}
 	  ]
 	},
@@ -178,29 +224,292 @@
 		}
 	  ]
 	},
-	"scp1_encounter": {
+	"chase_arrival": {
 	  "lines": [
 		{
-		  "speaker": "???",
-		  "text": "A shape at the edge of vision. It studies you—measuring friend or threat."
+		  "speaker": "",
+		  "text": "The rearmost door on the right wing shudders. Metal screeches. The lock disengages with a dull clunk and the sliding door swings inward—no one touched it.",
+		  "tags": ["shake:medium"]
+		},
+		{
+		  "speaker": "",
+		  "text": "Emergency light spills through the frame, painting the far wall in red.",
+		  "tags": ["shake:light"]
+		},
+		{
+		  "speaker": "",
+		  "text": "You spin toward the opening, heart slamming against your ribs.",
+		  "tags": ["shake:light"]
+		},
+		{
+		  "speaker": "",
+		  "text": "A middle-aged man in tactical gear staggers through the opening—rifle slung, uniform soaked with sweat, eyes wild and bloodshot.",
+		  "tags": ["show_chase"]
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "—the hell? You're not clearance staff. Who are you?"
+		},
+		{
+		  "speaker": "",
+		  "text": "He looks as surprised as you feel. For a moment neither of you moves."
+		}
+	  ]
+	},
+	"chase_evacuation": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Why are you still here? The evacuation order started thirty minutes ago! We need to leave immediately."
 		}
 	  ],
 	  "choices": [
 		{
-		  "text": "Stay calm. Speak softly.",
-		  "next": "scp1_befriend",
-		  "set_flag": "scp1_befriended"
+		  "text": "Tell the Truth: Tell him you woke up with no memory—that he's the first person you've seen.",
+		  "next": "chase_amnesia_response",
+		  "set_flag": "chase_told_amnesia",
+		  "reaction": {
+			"npc": "Chase",
+			"mood": "trusting",
+			"headline": "He believes you.",
+			"detail": "His grip on the rifle eases. For the first time, he looks at you like a person—not a problem."
+		  }
 		},
 		{
-		  "text": "Back away quickly.",
-		  "next": "scp1_hostile",
-		  "set_flag": "scp1_hostile"
+		  "text": "Be Vague: I couldn't find my keycard. It had fallen under the equipment in the Lab. *You point towards the room you were just in. ",
+		  "next": "chase_lie_response",
+		  "set_flag": "chase_lied_keycard",
+		  "reaction": {
+			"npc": "Chase",
+			"mood": "angry",
+			"headline": "He doesn't buy it.",
+			"detail": "His jaw tightens. Whatever patience he had is gone—replaced by the sharp edge of someone who has already seen too many bodies today."
+		  }
+		}
+	  ]
+	},
+	"chase_amnesia_response": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You don't know who this man is, but he's the first living person you've met since you awoke. The words spill out before you can second-guess them."
 		},
 		{
-		  "text": "Offer the notes you picked up from other papers.",
-		  "next": "scp1_befriend",
-		  "set_flag": "scp1_befriended",
-		  "requires_any_flags": ["paper_left_read", "paper_right_read"]
+		  "speaker": "",
+		  "text": "You tell him everything—waking on the floor, the blank where your memories should be, the alarms, the empty rooms."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "...Amnesia? Christ. Okay. Okay—breathe. I believe you. You look scared out of your mind, and nobody in their right mind would play games right now."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Listen, something went wrong in the labs—breach protocols, containment failures. This whole wing is compromised. We cannot stay here."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Nod and follow him.",
+		  "next": "chase_guide_gentle",
+		  "reaction": {
+			"npc": "Chase",
+			"mood": "happy",
+			"headline": "He's glad you came clean.",
+			"detail": "He nods once—grateful, hurried—and starts moving like every second still matters."
+		  }
+		}
+	  ]
+	},
+	"chase_lie_response": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You keep your face flat and offer the only excuse you can think of."
+		},
+		{
+		  "speaker": "",
+		  "text": "I couldn't find my keycard. It had fallen under the equipment in the Lab."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Under the—are you kidding me? Evac doesn't wait while you tear apart a supply closet!",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "We had a containment breach. People are dead. You do not wander off for paperwork. You move when I say move.",
+		  "portrait": "angry"
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Stay quiet and follow.",
+		  "next": "chase_guide_harsh",
+		  "reaction": {
+			"npc": "Chase",
+			"mood": "suspicious",
+			"headline": "He's watching you.",
+			"detail": "He doesn't argue further, but his eyes never quite leave you. Trust here is a luxury neither of you can afford."
+		  }
+		}
+	  ]
+	},
+	"chase_guide_gentle": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "I'm Chase—facility security. Stick close, watch my back, and don't touch anything labeled with a hazard stripe."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "The forward door is still on emergency power. We go through there, get you to the checkpoint, figure out who you are."
+		},
+		{
+		  "speaker": "",
+		  "text": "He jerks his chin toward the open door behind him—the same one he just stumbled through."
+		}
+	  ]
+	},
+	"chase_guide_harsh": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "I'm Chase. Security. You will do exactly what I tell you, when I tell you—no detours, no questions in a hot zone.",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Containment is blown. Air's wrong. If you lag behind, I leave you. That door stays open another minute—move.",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "",
+		  "text": "He shoves past you toward the rearmost open doorway, rifle up, expecting something worse than you in the dark ahead."
+		}
+	  ]
+	},
+	"hall_forward_enter": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "(You follow Chase through the open door.)"
+		}
+	  ]
+	},
+	"corridor3_chase_briefing_gentle": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Keep with me. This is Research Wing C—we're clear of the Archives wing now, but we're not safe."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "The Archives aren't a library. They're the intake and documentation block for contained specimens—manifests, sealed records, everything the public never sees."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Command issued a facility-wide evacuation when the labs breached containment. Alarms, then radio silence. That order went out over thirty minutes ago."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Most research staff never reached the muster points. I was on a final sweep when the network died—and then I found you still inside."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "I don't know how you missed the first wave. Right now we reach the checkpoint, figure out who you are, and stay breathing."
+		}
+	  ]
+	},
+	"corridor3_chase_briefing_harsh": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Research Wing C. Eyes forward. We don't stop again until we're clear of this floor.",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "The Archives catalog what this place actually holds—not books. Specimens. Intake files. Everything they buried under classification.",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Evacuation went facility-wide when containment failed in the labs. Thirty minutes ago. You should have been gone with the first wave—not digging through rooms.",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Half the researchers in this building are dead or worse. I wasn't hired to babysit stragglers, but the sweep's done and you're here.",
+		  "portrait": "angry"
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "You'll get answers at the checkpoint if we live that long. Move.",
+		  "portrait": "angry"
+		}
+	  ]
+	},
+	"corridor_return_hall": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You slip back into the littered east corridor. The open door and scattered papers are still there—Chase is ahead in Wing C if you need him."
+		}
+	  ]
+	},
+	"corridor3_door_l_far_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Labs 12–21. The reader is dead; the door hasn't been opened since the alarms started."
+		}
+	  ]
+	},
+	"corridor3_door_r_far_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Labs 22–31. Something chemical burns your sinuses. Whatever breached containment, it didn't stay in one room."
+		}
+	  ]
+	},
+	"corridor3_door_r_close_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A sealed lab door. The metal is scorched along the frame, as if something tried to get out—or in."
+		}
+	  ]
+	},
+	"corridor3_vent_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The vent grille rattles with stale air. No movement inside—just the distant hum of failing climate control."
+		}
+	  ]
+	},
+	"corridor3_sign_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Directional signage: Research Wing C — Authorized Personnel Only. Someone scratched EVAC through the middle in red paint."
+		}
+	  ]
+	},
+	"corridor3_camera_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A dome camera hangs overhead. Its status LED blinks amber—recording, or trying to."
+		}
+	  ]
+	},
+	"scp1_encounter": {
+	  "lines": [
+		{
+		  "speaker": "???",
+		  "text": "(Reserved for a later encounter—after the Chase sequence.)"
 		}
 	  ]
 	},
@@ -208,7 +517,7 @@
 	  "lines": [
 		{
 		  "speaker": "???",
-		  "text": "It stills. For now, you think it understands."
+		  "text": "(Reserved.)"
 		}
 	  ]
 	},
@@ -216,7 +525,7 @@
 	  "lines": [
 		{
 		  "speaker": "???",
-		  "text": "It bristles. You'll hear from it again—and not kindly."
+		  "text": "(Reserved.)"
 		}
 	  ]
 	}

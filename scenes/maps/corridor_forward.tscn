@@ -1,0 +1,188 @@
+[gd_scene format=3 uid="uid://c8fwdmapcor03"]
+
+[ext_resource type="Texture2D" uid="uid://b7kybmi8jprc3" path="res://assets/backgrounds/corridor3.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://co1hv4jns1u" path="res://scripts/hotspot_zone.gd" id="2_hotspot"]
+[ext_resource type="Script" uid="uid://6k81uajqec4" path="res://scripts/maps/interactable_overlay_layer.gd" id="3_overlays"]
+[ext_resource type="Script" uid="uid://bq51id45y1wx6" path="res://scripts/maps/map_editor_canvas.gd" id="4_canvas"]
+[ext_resource type="Script" uid="uid://bsnh002cr4dej" path="res://scripts/maps/character_presence_zone.gd" id="5_chase"]
+[ext_resource type="Texture2D" uid="uid://dexbgj18c506m" path="res://assets/Characters/Chase/chase.png" id="6_chase_tex"]
+
+[node name="CorridorForwardMap" type="Control" unique_id=378413462]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_canvas")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1543714714]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+
+[node name="InteractableOverlays" type="Control" parent="." unique_id=1119285173]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_overlays")
+map_id = "corridor_forward"
+
+[node name="ChaseWithPlayer" type="Control" parent="InteractableOverlays" unique_id=1647269098]
+z_index = 30
+layout_mode = 1
+anchor_left = 0.02
+anchor_top = 0.12
+anchor_right = 0.42
+anchor_bottom = 1.0
+offset_left = 1083.6
+offset_top = 94.40001
+offset_right = 1083.6001
+offset_bottom = 94.400024
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("5_chase")
+overlay_key = "chase_with_player"
+
+[node name="Sprite" type="TextureRect" parent="InteractableOverlays/ChaseWithPlayer" unique_id=308009958]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_chase_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hotspots" type="Control" parent="." unique_id=881383716]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="ReturnHall" type="Control" parent="Hotspots" unique_id=1507422623]
+layout_mode = 1
+anchor_left = 0.0365
+anchor_top = 0.0389
+anchor_right = 0.1667
+anchor_bottom = 0.9278
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Back to Corridor 2"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "return_hall"
+label_text = "Back to Corridor 2"
+interaction_type = "exit"
+knot = "corridor_return_hall"
+target_map = "hall_papers"
+
+[node name="DoorLFar" type="Control" parent="Hotspots" unique_id=1824625788]
+layout_mode = 1
+anchor_left = 0.2427
+anchor_top = 0.2259
+anchor_right = 0.3021
+anchor_bottom = 0.724
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door (labs 12–21)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door_l_far"
+label_text = "Door (labs 12–21)"
+knot = "corridor3_door_l_far_flavor"
+
+[node name="DoorRClose" type="Control" parent="Hotspots" unique_id=1979889545]
+layout_mode = 1
+anchor_left = 0.826
+anchor_top = 0.0315
+anchor_right = 0.9573
+anchor_bottom = 0.9278
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door (right)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door_r_close"
+label_text = "Door (right)"
+knot = "corridor3_door_r_close_flavor"
+
+[node name="DoorRFar" type="Control" parent="Hotspots" unique_id=1861081081]
+layout_mode = 1
+anchor_left = 0.6937
+anchor_top = 0.2204
+anchor_right = 0.752
+anchor_bottom = 0.726
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door (labs 22–31)"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door_r_far"
+label_text = "Door (labs 22–31)"
+knot = "corridor3_door_r_far_flavor"
+
+[node name="Vent" type="Control" parent="Hotspots" unique_id=1829207037]
+layout_mode = 1
+anchor_left = 0.4495
+anchor_top = 0.4954
+anchor_right = 0.5396
+anchor_bottom = 0.5917
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Vent"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "vent"
+label_text = "Vent"
+knot = "corridor3_vent_flavor"
+
+[node name="Sign" type="Control" parent="Hotspots" unique_id=1944424392]
+layout_mode = 1
+anchor_left = 0.4484
+anchor_top = 0.325
+anchor_right = 0.5458
+anchor_bottom = 0.4185
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Wall sign"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "sign"
+label_text = "Wall sign"
+knot = "corridor3_sign_flavor"
+
+[node name="Camera" type="Control" parent="Hotspots" unique_id=1370684875]
+layout_mode = 1
+anchor_left = 0.6245
+anchor_top = 0.2278
+anchor_right = 0.6485
+anchor_bottom = 0.2945
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Security camera"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "camera"
+label_text = "Security camera"
+knot = "corridor3_camera_flavor"

@@ -9,7 +9,11 @@
 - **Door** → keycard only; blocks if both items held but not named.
 - Leave without ID → `missing_researcher_id` (something assigns name later).
 
-## East corridor (`hall_papers`)
+## East corridor (`hall_papers`) → Corridor 3 (`corridor_forward`)
+
+After Chase’s guide dialogue, a **black wipe** transitions to Wing C. Chase **fades in** on the new map and delivers a briefing (`corridor3_chase_briefing_gentle` / `_harsh`) on the Archives wing, the containment breach, and the evacuation order.
+
+## East corridor (`hall_papers`) — papers and Chase at door
 
 | Paper | Position | Effect |
 |-------|----------|--------|
@@ -17,7 +21,7 @@
 | **Middle** | center | Encounter triggers on second line while reading |
 | Right | east | Flavor roster |
 
-Corridor encounter: calm / flee / offer notes (if left or right paper read).
+Center paper → **EH-14** document (full-screen reader) → inventory → door opens → **Chase** → player choices. SCP encounter comes later.
 
 ## Flags reference
 

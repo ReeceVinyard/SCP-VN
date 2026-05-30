@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://dpfoxwf1ashpw"]
+
+[ext_resource type="Script" path="res://scripts/ui/npc_reaction_overlay.gd" id="1_script"]
+
+[node name="NpcReactionOverlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="ReactionDim" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.02, 0.05, 0.72)
+
+[node name="ReactionCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ReactionPanel" type="PanelContainer" parent="ReactionCenter"]
+layout_mode = 2
+
+[node name="ReactionMargin" type="MarginContainer" parent="ReactionCenter/ReactionPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="ReactionVBox" type="VBoxContainer" parent="ReactionCenter/ReactionPanel/ReactionMargin"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 0)
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ReactionAccent" type="ColorRect" parent="ReactionCenter/ReactionPanel/ReactionMargin/ReactionVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="ReactionNpc" type="Label" parent="ReactionCenter/ReactionPanel/ReactionMargin/ReactionVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.92, 1)
+theme_override_font_sizes/font_size = 18
+text = "Chase"
+horizontal_alignment = 1
+
+[node name="ReactionMood" type="Label" parent="ReactionCenter/ReactionPanel/ReactionMargin/ReactionVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Trusting"
+horizontal_alignment = 1
+
+[node name="ReactionHeadline" type="Label" parent="ReactionCenter/ReactionPanel/ReactionMargin/ReactionVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "He believes you."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ReactionDetail" type="Label" parent="ReactionCenter/ReactionPanel/ReactionMargin/ReactionVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.76, 0.84, 1)
+theme_override_font_sizes/font_size = 17
+text = "Detail text"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ReactionTimerBar" type="ProgressBar" parent="ReactionCenter/ReactionPanel/ReactionMargin/ReactionVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+max_value = 5.0
+value = 5.0
+show_percentage = false
