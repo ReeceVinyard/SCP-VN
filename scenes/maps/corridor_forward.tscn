@@ -40,6 +40,37 @@ mouse_filter = 2
 script = ExtResource("3_overlays")
 map_id = "corridor_forward"
 
+[node name="ChaseBriefingCenter" type="Control" parent="InteractableOverlays" unique_id=1647269099]
+z_index = 30
+layout_mode = 1
+anchor_left = 0.52
+anchor_top = 0.08
+anchor_right = 0.98
+anchor_bottom = 1.0
+offset_left = -600.39996
+offset_top = -145.4
+offset_right = -600.3999
+offset_bottom = -145.40002
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1.2270373, 1.2156878)
+mouse_filter = 2
+script = ExtResource("5_chase")
+overlay_key = "chase_briefing_center"
+
+[node name="Sprite" type="TextureRect" parent="InteractableOverlays/ChaseBriefingCenter" unique_id=308009959]
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_chase_tex")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="ChaseWithPlayer" type="Control" parent="InteractableOverlays" unique_id=1647269098]
 z_index = 30
 layout_mode = 1
@@ -58,7 +89,6 @@ script = ExtResource("5_chase")
 overlay_key = "chase_with_player"
 
 [node name="Sprite" type="TextureRect" parent="InteractableOverlays/ChaseWithPlayer" unique_id=308009958]
-unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.9)
 layout_mode = 1
 anchors_preset = 15

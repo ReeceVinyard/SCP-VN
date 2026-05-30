@@ -206,6 +206,8 @@ func _format_choices(raw: Array) -> Array:
 		var disabled: bool = false
 		if c.has("requires_flag") and not GameState.has_flag(str(c["requires_flag"])):
 			disabled = true
+		if c.has("disabled_if_flag") and GameState.has_flag(str(c["disabled_if_flag"])):
+			disabled = true
 		if c.has("requires_any_flags"):
 			var any_ok := false
 			for f in c["requires_any_flags"]:

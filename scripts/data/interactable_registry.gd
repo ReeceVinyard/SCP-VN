@@ -55,6 +55,7 @@ const OVERLAY_SHOW_WHILE_FLAG := {
 		"chase_at_door": "chase_at_door_visible",
 	},
 	"corridor_forward": {
+		"chase_briefing_center": "chase_briefing_center_visible",
 		"chase_with_player": "chase_escort_visible",
 	},
 }

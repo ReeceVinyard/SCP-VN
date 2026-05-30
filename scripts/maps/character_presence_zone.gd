@@ -12,7 +12,7 @@ const DEFAULT_FADE_SEC := 2.0
 @export var show_in_editor: bool = true
 @export var editor_preview_mood: String = "normal"
 
-@onready var _sprite: TextureRect = %Sprite
+@onready var _sprite: TextureRect = _resolve_sprite()
 
 var _fade_tween: Tween
 var _is_faded_in: bool = false
@@ -43,7 +43,19 @@ func is_present_visible() -> bool:
 
 
 func get_texture_rect() -> TextureRect:
-	return get_node_or_null("%Sprite") as TextureRect
+	return _resolve_sprite()
+
+
+## Resolve this zone's own sprite by relative path so multiple presence zones
+## can coexist in one scene (no shared %Sprite unique-name collision).
+func _resolve_sprite() -> TextureRect:
+	var direct := get_node_or_null("Sprite")
+	if direct is TextureRect:
+		return direct as TextureRect
+	for child in get_children():
+		if child is TextureRect:
+			return child as TextureRect
+	return null
 
 
 func _on_fade_in_requested(key: String, duration_sec: float) -> void:
@@ -109,6 +121,11 @@ func sync_presence_from_flags() -> void:
 	_apply_runtime_texture()
 	var sprite := get_texture_rect()
 	if sprite == null:
+		return
+	# Don't interrupt an in-progress fade (e.g. dialogue mood updates firing
+	# while Chase is still fading in) — let the tween finish so he doesn't snap.
+	if _fade_tween and _fade_tween.is_valid() and _fade_tween.is_running():
+		sprite.visible = true
 		return
 	if _fade_tween and _fade_tween.is_valid():
 		_fade_tween.kill()

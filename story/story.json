@@ -196,7 +196,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "The archives feel safer than the corridor."
+		  "text": "The Research lab feels safer than the corridor."
 		}
 	  ]
 	},
@@ -400,11 +400,11 @@
 	  "lines": [
 		{
 		  "speaker": "Chase",
-		  "text": "Keep with me. This is Research Wing C—we're clear of the Archives wing now, but we're not safe."
+		  "text": "Keep with me. This is Research Wing C—we're clear of the Lab wing now, but we're not safe."
 		},
 		{
 		  "speaker": "Chase",
-		  "text": "The Archives aren't a library. They're the intake and documentation block for contained specimens—manifests, sealed records, everything the public never sees."
+		  "text": "The Archives isn't named because it's a sort of library. this is just the intake and documentation block for contained specimens—manifests, sealed records, everything the public never sees."
 		},
 		{
 		  "speaker": "Chase",
@@ -429,7 +429,7 @@
 		},
 		{
 		  "speaker": "Chase",
-		  "text": "The Archives catalog what this place actually holds—not books. Specimens. Intake files. Everything they buried under classification.",
+		  "text": "The Archives catalog what this place actually holds. Specimens. Intake files. Everything they buried under classification.",
 		  "portrait": "angry"
 		},
 		{
@@ -446,6 +446,158 @@
 		  "speaker": "Chase",
 		  "text": "You'll get answers at the checkpoint if we live that long. Move.",
 		  "portrait": "angry"
+		}
+	  ]
+	},
+	"corridor3_questions": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Catch your breath. We've got a few seconds before the next stretch—use them. Anything you need to ask, ask now."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Why is the whole facility being evacuated?",
+		  "next": "corridor3_q_evac",
+		  "set_flag": "asked_evac",
+		  "disabled_if_flag": "asked_evac"
+		},
+		{
+		  "text": "What was I even doing here? Why was I in the research department?",
+		  "next": "corridor3_q_work",
+		  "set_flag": "asked_work",
+		  "disabled_if_flag": "asked_work"
+		},
+		{
+		  "text": "How close are we to the exit?",
+		  "next": "corridor3_q_exit",
+		  "set_flag": "asked_exit",
+		  "disabled_if_flag": "asked_exit"
+		},
+		{
+		  "text": "No more questions. Let's continue.",
+		  "next": ""
+		}
+	  ]
+	},
+	"corridor3_q_evac": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Containment failed. A lot of the experiments down here broke loose, and the ones that did will kill you if you so much as share a corridor with them."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Command's solution is to seal the entire site as one unit—doors, levels, everything—and write it off."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "I was running the final sweep. Making sure the place was empty before they close the lid. That's when I found you."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Why is the whole facility being evacuated?",
+		  "next": "corridor3_q_evac",
+		  "set_flag": "asked_evac",
+		  "disabled_if_flag": "asked_evac"
+		},
+		{
+		  "text": "What was I even doing here? Why was I in the research department?",
+		  "next": "corridor3_q_work",
+		  "set_flag": "asked_work",
+		  "disabled_if_flag": "asked_work"
+		},
+		{
+		  "text": "How close are we to the exit?",
+		  "next": "corridor3_q_exit",
+		  "set_flag": "asked_exit",
+		  "disabled_if_flag": "asked_exit"
+		},
+		{
+		  "text": "No more questions. Let's continue.",
+		  "next": ""
+		}
+	  ]
+	},
+	"corridor3_q_work": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Your work? Couldn't tell you. I run security, not the personnel roster."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "But you walked out of the Research wing with a researcher's ID, so that's what you are. A researcher."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Whatever you were assigned to, it was one of the more docile areas. If you'd been posted near the bad wings, we wouldn't be having this conversation."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Why is the whole facility being evacuated?",
+		  "next": "corridor3_q_evac",
+		  "set_flag": "asked_evac",
+		  "disabled_if_flag": "asked_evac"
+		},
+		{
+		  "text": "What was I even doing here? Why was I in the research department?",
+		  "next": "corridor3_q_work",
+		  "set_flag": "asked_work",
+		  "disabled_if_flag": "asked_work"
+		},
+		{
+		  "text": "How close are we to the exit?",
+		  "next": "corridor3_q_exit",
+		  "set_flag": "asked_exit",
+		  "disabled_if_flag": "asked_exit"
+		},
+		{
+		  "text": "No more questions. Let's continue.",
+		  "next": ""
+		}
+	  ]
+	},
+	"corridor3_q_exit": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "The exit? Further than I'd like."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "This place has more floors than even I've ever been cleared to see. I don't know where the bottom is, and I'd rather not find out."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "What I do know is that we're deep—down in the laboratory levels, at least. We climb from here. Slow, and quiet."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Why is the whole facility being evacuated?",
+		  "next": "corridor3_q_evac",
+		  "set_flag": "asked_evac",
+		  "disabled_if_flag": "asked_evac"
+		},
+		{
+		  "text": "What was I even doing here? Why was I in the research department?",
+		  "next": "corridor3_q_work",
+		  "set_flag": "asked_work",
+		  "disabled_if_flag": "asked_work"
+		},
+		{
+		  "text": "How close are we to the exit?",
+		  "next": "corridor3_q_exit",
+		  "set_flag": "asked_exit",
+		  "disabled_if_flag": "asked_exit"
+		},
+		{
+		  "text": "No more questions. Let's continue.",
+		  "next": ""
 		}
 	  ]
 	},

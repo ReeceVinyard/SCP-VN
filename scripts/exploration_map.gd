@@ -26,8 +26,11 @@ const MAP_TRANSITION_FADE_OUT_SEC := 0.7
 const MAP_TRANSITION_HOLD_SEC := 0.2
 const MAP_TRANSITION_FADE_IN_SEC := 0.95
 const CHASE_ESCORT_OVERLAY_KEY := "chase_with_player"
+const CHASE_BRIEFING_CENTER_OVERLAY_KEY := "chase_briefing_center"
 const CHASE_GUIDE_KNOTS := ["chase_guide_gentle", "chase_guide_harsh"]
 const CORRIDOR_BRIEFING_KNOTS := ["corridor3_chase_briefing_gentle", "corridor3_chase_briefing_harsh"]
+const CORRIDOR_QUESTIONS_KNOT := "corridor3_questions"
+const CORRIDOR_QA_KNOTS := ["corridor3_questions", "corridor3_q_evac", "corridor3_q_work", "corridor3_q_exit"]
 
 var _corridor_transition_running: bool = false
 
@@ -362,6 +365,9 @@ func _on_dialogue_ended(ended_knot: String) -> void:
 		_launch_corridor_forward_transition(_briefing_knot_for_guide(knot))
 		return
 	if knot in CORRIDOR_BRIEFING_KNOTS:
+		call_deferred("_start_knot", CORRIDOR_QUESTIONS_KNOT)
+		return
+	if knot in CORRIDOR_QA_KNOTS:
 		_enable_free_exploration()
 		call_deferred("_show_side_escort_after_briefing")
 		return
@@ -416,6 +422,7 @@ func _run_corridor_forward_transition(briefing_knot: String) -> void:
 		return
 	GameState.set_flag("chase_at_door_visible", false)
 	GameState.set_flag("chase_escort_visible", false)
+	GameState.set_flag("chase_briefing_center_visible", false)
 	load_map("corridor_forward")
 	GameState.set_flag("corridor_forward_seen")
 	await get_tree().process_frame
@@ -424,7 +431,9 @@ func _run_corridor_forward_transition(briefing_knot: String) -> void:
 		await transition.fade_from_black(MAP_TRANSITION_FADE_IN_SEC)
 	if not is_inside_tree():
 		return
-	GameState.set_flag("chase_escort_visible")
+	# Chase briefs the player centered (like the previous corridor) before exploration begins.
+	GameState.set_flag("chase_briefing_center_visible")
+	_show_chase_presence(CHASE_BRIEFING_CENTER_OVERLAY_KEY, CHASE_PRESENCE_FADE_SEC)
 	_start_knot(briefing_knot)
 
 
@@ -436,8 +445,16 @@ func _get_map_transition() -> Node:
 
 
 func _show_side_escort_after_briefing() -> void:
-	if not is_inside_tree() or not GameState.has_flag("chase_escort_visible"):
+	if not is_inside_tree():
 		return
+	# Fade the large centered Chase fully out first, then fade the small side escort in.
+	var center_zone := _find_character_presence_zone(CHASE_BRIEFING_CENTER_OVERLAY_KEY)
+	if center_zone:
+		await center_zone.hide_with_fade(CHASE_PRESENCE_FADE_SEC)
+	GameState.set_flag("chase_briefing_center_visible", false)
+	if not is_inside_tree():
+		return
+	GameState.set_flag("chase_escort_visible")
 	await _show_chase_presence(CHASE_ESCORT_OVERLAY_KEY, CHASE_PRESENCE_FADE_SEC)
 
 
@@ -485,7 +502,7 @@ func _sync_world_after_load_async() -> void:
 
 
 func _capture_chase_presence_shown() -> Dictionary:
-	var out := {"chase_at_door": false, "chase_with_player": false}
+	var out := {"chase_at_door": false, "chase_with_player": false, "chase_briefing_center": false}
 	for overlay_key in out.keys():
 		var zone := _find_character_presence_zone(overlay_key)
 		if zone and zone.is_present_visible():
@@ -507,7 +524,13 @@ func _apply_chase_presence_shown_save(data: Variant) -> void:
 		GameState.set_flag("chase_at_door_visible")
 	if bool(data.get("chase_with_player", false)):
 		GameState.set_flag("chase_escort_visible")
-	_restore_chase_visible = GameState.has_flag("chase_at_door_visible") or GameState.has_flag("chase_escort_visible")
+	if bool(data.get("chase_briefing_center", false)):
+		GameState.set_flag("chase_briefing_center_visible")
+	_restore_chase_visible = (
+		GameState.has_flag("chase_at_door_visible")
+		or GameState.has_flag("chase_escort_visible")
+		or GameState.has_flag("chase_briefing_center_visible")
+	)
 
 
 func _sync_chase_presence() -> void:

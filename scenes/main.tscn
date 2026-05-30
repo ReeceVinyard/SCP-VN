@@ -14,9 +14,9 @@
 [ext_resource type="Script" uid="uid://bxne40gc5enhs" path="res://scripts/ui/choice_overlay.gd" id="11_choice"]
 [ext_resource type="Script" uid="uid://b85mhl4l78f43" path="res://scripts/ui/map_transition_overlay.gd" id="12_transition"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a8y0u"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trceg"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_jkv2x"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_a8y0u"]
 
 [node name="Main" type="Control" unique_id=1172584199]
 layout_mode = 3
@@ -547,9 +547,9 @@ theme_override_colors/font_uneditable_color = Color(0.12, 0.1, 0.08, 0)
 theme_override_colors/font_placeholder_color = Color(0.12, 0.1, 0.08, 0)
 theme_override_colors/caret_color = Color(0.12, 0.1, 0.08, 1)
 theme_override_font_sizes/font_size = 35
-theme_override_styles/normal = SubResource("StyleBoxEmpty_a8y0u")
-theme_override_styles/read_only = SubResource("StyleBoxEmpty_a8y0u")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_a8y0u")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_trceg")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_trceg")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_trceg")
 alignment = 1
 max_length = 24
 context_menu_enabled = false
@@ -602,7 +602,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 toggle_mode = true
-button_group = SubResource("ButtonGroup_jkv2x")
+button_group = SubResource("ButtonGroup_a8y0u")
 text = "Male ID"
 
 [node name="IdFemaleButton" type="Button" parent="ModalLayer/NameEntryModal/IdStage/StageCenter/CardColumn/SwapCenter/IdSwapBlock/IdSwapRow" unique_id=408973858]
@@ -610,7 +610,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 toggle_mode = true
-button_group = SubResource("ButtonGroup_jkv2x")
+button_group = SubResource("ButtonGroup_a8y0u")
 text = "Female ID"
 
 [node name="ItemFoundModal" type="Control" parent="ModalLayer" unique_id=516463321]

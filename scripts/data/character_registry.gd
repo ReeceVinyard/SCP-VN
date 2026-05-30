@@ -15,11 +15,12 @@ const PORTRAITS := {
 const MAP_PRESENCE_MOOD := {
 	"chase_at_door": "normal",
 	"chase_with_player": "normal",
+	"chase_briefing_center": "normal",
 }
 
 const PRESENCE_OVERLAY_KEYS := {
 	"hall_papers": ["chase_at_door"],
-	"corridor_forward": ["chase_with_player"],
+	"corridor_forward": ["chase_briefing_center", "chase_with_player"],
 }
 
 
@@ -65,6 +66,8 @@ static func chase_presence_flag(overlay_key: String) -> String:
 			return "chase_at_door_visible"
 		"chase_with_player":
 			return "chase_escort_visible"
+		"chase_briefing_center":
+			return "chase_briefing_center_visible"
 		_:
 			return ""
 

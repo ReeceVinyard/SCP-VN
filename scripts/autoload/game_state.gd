@@ -21,6 +21,7 @@ const FLAG_DEFAULTS := {
 	"hall_door_r_far_open": false,
 	"chase_at_door_visible": false,
 	"chase_escort_visible": false,
+	"chase_briefing_center_visible": false,
 	"chase_first_line_spoken": false,
 	"chase_told_amnesia": false,
 	"chase_lied_keycard": false,
@@ -31,6 +32,9 @@ const FLAG_DEFAULTS := {
 	"hall_intro_seen": false,
 	"corridor_forward_seen": false,
 	"eh_14_read": false,
+	"asked_evac": false,
+	"asked_work": false,
+	"asked_exit": false,
 }
 
 var current_map_id: String = "archives"
