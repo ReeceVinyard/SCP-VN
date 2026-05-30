@@ -76,6 +76,19 @@
 		}
 	  ]
 	},
+	"archives_amnesia": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Ugh... it's all so foggy. I can barely even remember my name...",
+		  "tags": ["memory:frag_waking"]
+		},
+		{
+		  "speaker": "",
+		  "text": "(Something surfaced just now — a fragment of memory. They'll collect in your Memories. Press M to open them and start piecing together what happened.)"
+		}
+	  ]
+	},
 	"archives_shelf_flavor": {
 	  "lines": [
 		{

@@ -7,6 +7,8 @@ const ICON_MIN_SIZE := Vector2(560, 360)
 @onready var _item_name: Label = %InvItemName
 @onready var _description: Label = %DescriptionLabel
 @onready var _icon: TextureRect = %ItemIcon
+@onready var _icon_placeholder: Panel = %InvIconPlaceholder
+@onready var _category: Label = %InvCategoryLabel
 @onready var _swap_row: HBoxContainer = %IdSwapRow
 @onready var _male_button: Button = %InvIdMaleButton
 @onready var _female_button: Button = %InvIdFemaleButton
@@ -89,10 +91,25 @@ func _refresh() -> void:
 func _show_empty() -> void:
 	_item_name.text = "No items"
 	_description.text = "Search the room and pick up anything useful."
-	_icon.texture = null
-	_icon.visible = false
+	_set_icon("")
+	_category.visible = false
 	_swap_row.visible = false
 	_read_button.visible = false
+
+
+## Show the item icon, or a styled placeholder when art is missing.
+func _set_icon(icon_path: String) -> void:
+	var texture: Texture2D = null
+	if not icon_path.is_empty():
+		texture = load(icon_path) as Texture2D
+	if texture != null:
+		_icon.texture = texture
+		_icon.visible = true
+		_icon_placeholder.visible = false
+	else:
+		_icon.texture = null
+		_icon.visible = false
+		_icon_placeholder.visible = true
 
 
 func _on_item_selected(index: int) -> void:
@@ -106,13 +123,10 @@ func _show_item(index: int, update_selection: bool) -> void:
 	var item_id: String = GameState.inventory[index]
 	_item_name.text = ItemRegistry.get_display_name(item_id)
 	_description.text = ItemRegistry.get_description(item_id)
-	var icon_path := ItemRegistry.get_icon_path(item_id)
-	if icon_path.is_empty():
-		_icon.texture = null
-		_icon.visible = false
-	else:
-		_icon.texture = load(icon_path) as Texture2D
-		_icon.visible = _icon.texture != null
+	var category := ItemRegistry.get_category(item_id)
+	_category.text = category
+	_category.visible = not category.is_empty()
+	_set_icon(ItemRegistry.get_icon_path(item_id))
 	var show_swap := item_id == "researcher_id" and GameState.can_swap_id_variant()
 	_swap_row.visible = show_swap
 	_read_button.visible = ItemRegistry.is_readable_document(item_id)

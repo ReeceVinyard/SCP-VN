@@ -25,6 +25,10 @@ const CHASE_PRESENCE_FADE_SEC := 2.0
 const MAP_TRANSITION_FADE_OUT_SEC := 0.7
 const MAP_TRANSITION_HOLD_SEC := 0.2
 const MAP_TRANSITION_FADE_IN_SEC := 0.95
+const ARCHIVES_DEPART_SHAKE_HOLD_SEC := 0.45
+const ARCHIVES_DEPART_FADE_OUT_SEC := 0.6
+const ARCHIVES_DEPART_FADE_HOLD_SEC := 0.35
+const ARCHIVES_DEPART_FADE_IN_SEC := 0.85
 const CHASE_ESCORT_OVERLAY_KEY := "chase_with_player"
 const CHASE_BRIEFING_CENTER_OVERLAY_KEY := "chase_briefing_center"
 const CHASE_GUIDE_KNOTS := ["chase_guide_gentle", "chase_guide_harsh"]
@@ -336,8 +340,10 @@ func _on_dialogue_ended(ended_knot: String) -> void:
 	get_viewport().gui_release_focus()
 	var knot := ended_knot if not ended_knot.is_empty() else _last_knot
 	if _map_id == "archives" and knot == "archives_exit":
-		GameState.leave_archives()
-		load_map("hall_papers")
+		_run_archives_departure()
+		return
+	if knot == "archives_amnesia":
+		_run_archives_to_hall_transition()
 		return
 	if knot == "paper_middle":
 		var hs_id := _hotspot_id_for_knot("paper_middle")
@@ -392,6 +398,40 @@ func _briefing_knot_for_door() -> String:
 	if GameState.has_flag("chase_lied_keycard"):
 		return "corridor3_chase_briefing_harsh"
 	return "corridor3_chase_briefing_gentle"
+
+
+func _run_archives_departure() -> void:
+	if not is_inside_tree():
+		return
+	GameState.disable_exploration()
+	# A slight shake as the fog hits, then a fade out-and-in to black.
+	DialogueManager.screen_shake_requested.emit("light")
+	await get_tree().create_timer(ARCHIVES_DEPART_SHAKE_HOLD_SEC).timeout
+	if not is_inside_tree():
+		return
+	var transition := _get_map_transition()
+	if transition:
+		await transition.fade_to_black(ARCHIVES_DEPART_FADE_OUT_SEC, ARCHIVES_DEPART_FADE_HOLD_SEC)
+		await transition.fade_from_black(ARCHIVES_DEPART_FADE_IN_SEC)
+	if not is_inside_tree():
+		return
+	_start_knot("archives_amnesia")
+
+
+func _run_archives_to_hall_transition() -> void:
+	if not is_inside_tree():
+		return
+	var transition := _get_map_transition()
+	if transition:
+		await transition.fade_to_black(MAP_TRANSITION_FADE_OUT_SEC, MAP_TRANSITION_HOLD_SEC)
+	if not is_inside_tree():
+		return
+	GameState.leave_archives()
+	load_map("hall_papers")
+	await get_tree().process_frame
+	_refresh_map_overlays()
+	if transition:
+		await transition.fade_from_black(MAP_TRANSITION_FADE_IN_SEC)
 
 
 func _launch_corridor_forward_transition(briefing_knot: String) -> void:

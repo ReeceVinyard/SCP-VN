@@ -6,6 +6,7 @@ signal flags_changed
 signal player_name_changed
 signal id_variant_changed
 signal exploration_enabled_changed(enabled: bool)
+signal memory_fragments_changed
 
 const FLAG_DEFAULTS := {
 	"tutorial_seen_click": false,
@@ -48,6 +49,8 @@ var id_variant: String = "male"
 var opening_cinematic_done: bool = false
 
 var _picked_hotspots: Dictionary = {}
+## Recovered memory fragments: fragment_id -> true. See MemoryRegistry.
+var memory_fragments: Dictionary = {}
 
 
 func _ready() -> void:
@@ -65,6 +68,7 @@ func reset_run() -> void:
 	id_variant = "male"
 	opening_cinematic_done = false
 	_picked_hotspots.clear()
+	memory_fragments.clear()
 	_emit_state_refresh()
 
 
@@ -80,6 +84,10 @@ func capture_save_data() -> Dictionary:
 	for key in _picked_hotspots.keys():
 		if _picked_hotspots[key]:
 			picked_out[str(key)] = true
+	var memory_out: Array[String] = []
+	for key in memory_fragments.keys():
+		if memory_fragments[key] and str(key) not in memory_out:
+			memory_out.append(str(key))
 	return {
 		"current_map_id": current_map_id,
 		"player_name": player_name,
@@ -91,6 +99,7 @@ func capture_save_data() -> Dictionary:
 		"id_variant": id_variant,
 		"opening_cinematic_done": opening_cinematic_done,
 		"picked_hotspots": picked_out,
+		"memory_fragments": memory_out,
 	}
 
 
@@ -126,6 +135,13 @@ func apply_save_data(data: Variant) -> bool:
 		for key in picked.keys():
 			if picked[key]:
 				_picked_hotspots[str(key)] = true
+	memory_fragments.clear()
+	var memories: Variant = data.get("memory_fragments", [])
+	if typeof(memories) == TYPE_ARRAY:
+		for entry in memories:
+			var frag_id := str(entry)
+			if MemoryRegistry.has_fragment(frag_id):
+				memory_fragments[frag_id] = true
 	_emit_state_refresh()
 	if has_flag("has_named_player") or has_flag("named_by_scp"):
 		player_name_changed.emit()
@@ -146,6 +162,36 @@ func _load_inventory_list(raw: Variant) -> Array[String]:
 func _emit_state_refresh() -> void:
 	inventory_changed.emit()
 	flags_changed.emit()
+	memory_fragments_changed.emit()
+
+
+## --- Memory fragments -------------------------------------------------------
+
+func unlock_memory_fragment(fragment_id: String) -> bool:
+	if not MemoryRegistry.has_fragment(fragment_id):
+		push_warning("Unknown memory fragment: %s" % fragment_id)
+		return false
+	if memory_fragments.get(fragment_id, false):
+		return false
+	memory_fragments[fragment_id] = true
+	memory_fragments_changed.emit()
+	return true
+
+
+func is_memory_unlocked(fragment_id: String) -> bool:
+	return memory_fragments.get(fragment_id, false)
+
+
+func unlocked_memory_count() -> int:
+	var count := 0
+	for key in memory_fragments.keys():
+		if memory_fragments[key]:
+			count += 1
+	return count
+
+
+func total_memory_count() -> int:
+	return MemoryRegistry.total_count()
 
 
 func mark_opening_cinematic_done() -> void:

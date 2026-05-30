@@ -4,12 +4,14 @@ extends Control
 @onready var _map_host: Control = %MapHost
 @onready var _dialogue_box: PanelContainer = %DialogueBox
 @onready var _inventory: Control = %InventoryPanel
+@onready var _memories: Control = %MemoryPanel
 @onready var _name_modal: Control = %NameEntryModal
 @onready var _item_found_modal: Control = %ItemFoundModal
 @onready var _document_reader: Control = %DocumentReaderModal
 @onready var _npc_reaction: Control = %NpcReactionOverlay
 @onready var _screen_shake: Node = %ScreenShakeController
 @onready var _inventory_button: Button = %InventoryButton
+@onready var _memories_button: Button = %MemoriesButton
 @onready var _status_label: Label = %StatusLabel
 @onready var _eye_overlay: ColorRect = %EyeOpenOverlay
 @onready var _hud: HBoxContainer = %HUD
@@ -24,6 +26,7 @@ func _ready() -> void:
 	# Root must not steal clicks from WorldLayer / map hotspots (default is STOP).
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_inventory_button.pressed.connect(_inventory.toggle)
+	_memories_button.pressed.connect(_memories.toggle)
 	_save_button.pressed.connect(_on_save_pressed)
 	_load_button.pressed.connect(_on_load_pressed)
 	_dialogue_box.advance_requested.connect(DialogueManager.advance)
@@ -112,9 +115,13 @@ func _on_document_closed(item_id: String, grant_item_on_close: bool) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _item_found_modal.visible or _document_reader.visible or _npc_reaction.visible or _name_modal.visible:
 		return
-	if _inventory.visible:
+	if _inventory.visible or _memories.visible:
 		return
 	if _exploration.try_handle_map_click(event):
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("ui_memories"):
+		_memories.toggle()
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("quick_save"):
@@ -171,6 +178,7 @@ func _apply_loaded_game() -> void:
 	_npc_reaction.hide()
 	_name_modal.hide()
 	_inventory.hide()
+	_memories.hide()
 	if _ensure_opening_fade_targets():
 		_exploration.modulate.a = 1.0
 		_map_host.modulate.a = 1.0
