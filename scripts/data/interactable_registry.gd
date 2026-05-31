@@ -26,6 +26,7 @@ const MAP_OVERLAYS := {
 		"door_r_close": "res://assets/Interactables/corridor2_door_R_close.png",
 		"door_r_far": "res://assets/Interactables/corridor2_door_R_far.png",
 		"door_r_far_open": "res://assets/Interactables/corridor2_open_door.png",
+		"sign": "res://assets/Interactables/Corridor 2 sign.png",
 		"chase_at_door": "res://assets/Characters/Chase/chase.png",
 	},
 	"corridor_forward": {
@@ -101,6 +102,7 @@ const OVERLAY_HIT_RECTS := {
 		"door_l_far": Rect2(0.2427, 0.2241, 0.0594, 0.4981),
 		"door_r_close": Rect2(0.8281, 0.0333, 0.1292, 0.8870),
 		"door_r_far": Rect2(0.6937, 0.2241, 0.0594, 0.4981),
+		"sign": Rect2(0.4484, 0.325, 0.0974, 0.0926),
 	},
 	"corridor_forward": {
 		"return_hall": Rect2(0.0365, 0.0389, 0.1302, 0.8889),

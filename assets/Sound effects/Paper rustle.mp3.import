@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://coljijmj16hca"
+path="res://.godot/imported/Paper rustle.mp3-18d3cf05ace852b1fdf8d4d3c0ba8458.mp3str"
+
+[deps]
+
+source_file="res://assets/Sound effects/Paper rustle.mp3"
+dest_files=["res://.godot/imported/Paper rustle.mp3-18d3cf05ace852b1fdf8d4d3c0ba8458.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

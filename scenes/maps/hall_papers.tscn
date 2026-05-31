@@ -195,3 +195,18 @@ script = ExtResource("2_hotspot")
 hotspot_id = "door_r_close"
 label_text = "Door (right)"
 knot = "door_r_close_flavor"
+
+[node name="Sign" type="Control" parent="Hotspots" unique_id=277096679]
+layout_mode = 1
+anchor_left = 0.4484
+anchor_top = 0.325
+anchor_right = 0.5458
+anchor_bottom = 0.4176
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Wall sign"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "sign"
+label_text = "Wall sign"
+knot = "corridor2_sign_flavor"

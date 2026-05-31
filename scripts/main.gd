@@ -81,6 +81,7 @@ func _start_opening_sequence() -> void:
 
 func _on_item_acquired(item_id: String) -> void:
 	if ItemRegistry.is_readable_document(item_id):
+		SoundManager.play("paper_rustle")
 		_document_reader.show_document(item_id, false)
 	else:
 		_item_found_modal.show_item(item_id)
@@ -105,6 +106,8 @@ func _on_npc_reaction_finished() -> void:
 
 func _on_document_closed(item_id: String, grant_item_on_close: bool) -> void:
 	if grant_item_on_close and not GameState.has_item(item_id):
+		if ItemRegistry.is_readable_document(item_id):
+			SoundManager.play("paper_rustle")
 		GameState.add_item(item_id, false)
 	if item_id == "eh_14":
 		GameState.set_flag("eh_14_read")

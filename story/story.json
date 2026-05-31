@@ -237,6 +237,18 @@
 		}
 	  ]
 	},
+	"corridor2_sign_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A wall-mounted directory sign. An arrow points left to LABS 28–31; right to LABS 32–35."
+		},
+		{
+		  "speaker": "",
+		  "text": "The numbers climb the deeper the Archives go. Whatever they kept down here, they didn't want it near the surface."
+		}
+	  ]
+	},
 	"chase_arrival": {
 	  "lines": [
 		{

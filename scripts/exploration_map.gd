@@ -297,11 +297,15 @@ func _handle_door(hs: Dictionary) -> void:
 	if GameState.needs_mandatory_naming():
 		_start_knot(hs.get("knot_need_name", ""))
 		return
+	# Keypad accepts the keycard and the reader chirps.
+	SoundManager.play("keypad_beep")
 	_last_knot = hs.get("knot_exit", "")
 	_start_knot(_last_knot)
 
 
 func _handle_paper(hs: Dictionary) -> void:
+	# Handling paperwork on the floor — rustle whether it's new or re-read.
+	SoundManager.play("paper_rustle")
 	var paper_id: String = hs.get("paper_id", "")
 	if GameState.has_read_paper(paper_id):
 		_start_knot(hs.get("empty_knot", ""))
@@ -317,6 +321,8 @@ func _handle_exit(hs: Dictionary) -> void:
 			briefing = "corridor3_chase_briefing_harsh" if GameState.has_flag("chase_lied_keycard") else "corridor3_chase_briefing_gentle"
 		_launch_corridor_forward_transition(briefing)
 		return
+	# An ordinary door swinging open onto the next/previous room.
+	SoundManager.play("door_opening")
 	GameState.current_map_id = hs.get("target_map", _map_id)
 	_start_knot(hs.get("knot", ""))
 
@@ -404,6 +410,8 @@ func _run_archives_departure() -> void:
 	if not is_inside_tree():
 		return
 	GameState.disable_exploration()
+	# The unlocked door swings open as the player steps through.
+	SoundManager.play("door_opening")
 	# A slight shake as the fog hits, then a fade out-and-in to black.
 	DialogueManager.screen_shake_requested.emit("light")
 	await get_tree().create_timer(ARCHIVES_DEPART_SHAKE_HOLD_SEC).timeout
@@ -438,6 +446,8 @@ func _launch_corridor_forward_transition(briefing_knot: String) -> void:
 	if briefing_knot.is_empty() or _corridor_transition_running:
 		return
 	_corridor_transition_running = true
+	# The door ahead opens as Chase leads the player through to the next corridor.
+	SoundManager.play("door_opening")
 	_run_corridor_forward_transition_async(briefing_knot)
 
 

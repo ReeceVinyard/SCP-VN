@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b5h1rbrb3gctn"
+path="res://.godot/imported/Memory unlocked.mp3-61a42048b75462595feb6e29c0d92442.mp3str"
+
+[deps]
+
+source_file="res://assets/Sound effects/Memory unlocked.mp3"
+dest_files=["res://.godot/imported/Memory unlocked.mp3-61a42048b75462595feb6e29c0d92442.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

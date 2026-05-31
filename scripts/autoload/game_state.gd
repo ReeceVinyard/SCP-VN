@@ -174,6 +174,7 @@ func unlock_memory_fragment(fragment_id: String) -> bool:
 	if memory_fragments.get(fragment_id, false):
 		return false
 	memory_fragments[fragment_id] = true
+	SoundManager.play("memory_unlocked")
 	memory_fragments_changed.emit()
 	return true
 
