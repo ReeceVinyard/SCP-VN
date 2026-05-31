@@ -189,6 +189,8 @@ func _show_current_line(skip_story_tags: bool = false) -> void:
 				character_presence_fade_in.emit("chase_at_door", fade_sec)
 			elif tag_str.begins_with("memory:"):
 				GameState.unlock_memory_fragment(tag_str.substr(7))
+			elif tag_str.begins_with("sfx:"):
+				SoundManager.play(tag_str.substr(4))
 	var text: String = _substitute(str(entry.get("text", "")))
 	var speaker: String = str(entry.get("speaker", ""))
 	var portrait: String = str(entry.get("portrait", ""))

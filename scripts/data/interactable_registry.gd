@@ -35,7 +35,7 @@ const MAP_OVERLAYS := {
 		"door_r_close": "res://assets/Interactables/corridor3_door_R_close.png",
 		"door_r_far": "res://assets/Interactables/corridor3_door_R_far.png",
 		"vent": "res://assets/Interactables/corridor3_vent.png",
-		"sign": "res://assets/Interactables/corridor3_sign.png",
+		"sign": "res://assets/Interactables/corridor 3 sign.png",
 		"camera": "res://assets/Interactables/corridor3_camera.png",
 	},
 }
@@ -110,7 +110,7 @@ const OVERLAY_HIT_RECTS := {
 		"door_r_close": Rect2(0.826, 0.0315, 0.1313, 0.8963),
 		"door_r_far": Rect2(0.6937, 0.2204, 0.0583, 0.5056),
 		"vent": Rect2(0.4495, 0.4954, 0.0901, 0.0963),
-		"sign": Rect2(0.4484, 0.325, 0.0974, 0.0935),
+		"sign": Rect2(0.4484, 0.325, 0.0974, 0.0926),
 		"camera": Rect2(0.6245, 0.2278, 0.024, 0.0667),
 	},
 }

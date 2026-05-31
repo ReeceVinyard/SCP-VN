@@ -36,6 +36,12 @@ const FLAG_DEFAULTS := {
 	"asked_evac": false,
 	"asked_work": false,
 	"asked_exit": false,
+	"c3_tried_return": false,
+	"c3_tried_l_far": false,
+	"c3_tried_r_far": false,
+	"c3_tried_r_close": false,
+	"c3_west_wing_pointed": false,
+	"west_wing_reached": false,
 }
 
 var current_map_id: String = "archives"

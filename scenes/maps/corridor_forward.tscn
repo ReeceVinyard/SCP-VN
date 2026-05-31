@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bq51id45y1wx6" path="res://scripts/maps/map_editor_canvas.gd" id="4_canvas"]
 [ext_resource type="Script" uid="uid://bsnh002cr4dej" path="res://scripts/maps/character_presence_zone.gd" id="5_chase"]
 [ext_resource type="Texture2D" uid="uid://dexbgj18c506m" path="res://assets/Characters/Chase/chase.png" id="6_chase_tex"]
+[ext_resource type="Texture2D" uid="uid://b6p80ccydh2xy" path="res://assets/Interactables/corridor 3 sign.png" id="7_sign"]
 
 [node name="CorridorForwardMap" type="Control" unique_id=378413462]
 custom_minimum_size = Vector2(1920, 1080)
@@ -27,6 +28,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("1_bg")
+expand_mode = 1
+
+[node name="SignArt" type="TextureRect" parent="." unique_id=778899001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_sign")
 expand_mode = 1
 
 [node name="InteractableOverlays" type="Control" parent="." unique_id=1119285173]
@@ -192,7 +204,7 @@ layout_mode = 1
 anchor_left = 0.4484
 anchor_top = 0.325
 anchor_right = 0.5458
-anchor_bottom = 0.4185
+anchor_bottom = 0.4176
 grow_horizontal = 0
 grow_vertical = 0
 tooltip_text = "Wall sign"

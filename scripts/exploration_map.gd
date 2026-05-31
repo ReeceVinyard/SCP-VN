@@ -35,6 +35,21 @@ const CHASE_GUIDE_KNOTS := ["chase_guide_gentle", "chase_guide_harsh"]
 const CORRIDOR_BRIEFING_KNOTS := ["corridor3_chase_briefing_gentle", "corridor3_chase_briefing_harsh"]
 const CORRIDOR_QUESTIONS_KNOT := "corridor3_questions"
 const CORRIDOR_QA_KNOTS := ["corridor3_questions", "corridor3_q_evac", "corridor3_q_work", "corridor3_q_exit"]
+## Corridor 3 dead-end doors → (knot, "tried" flag). None of these let the player leave.
+const CORRIDOR3_DEADEND_DOORS := {
+	"return_hall": {"knot": "corridor3_back_blocked", "flag": "c3_tried_return"},
+	"door_l_far": {"knot": "corridor3_door_l_far_flavor", "flag": "c3_tried_l_far"},
+	"door_r_far": {"knot": "corridor3_door_r_far_flavor", "flag": "c3_tried_r_far"},
+	"door_r_close": {"knot": "corridor3_door_r_close_flavor", "flag": "c3_tried_r_close"},
+}
+const CORRIDOR3_DEADEND_KNOTS := ["corridor3_back_blocked", "corridor3_door_l_far_flavor", "corridor3_door_r_far_flavor", "corridor3_door_r_close_flavor"]
+const CORRIDOR3_WEST_WING_KNOT := "corridor3_west_wing"
+const WEST_WING_DOOR_VIDEO := "res://assets/Videosandgifs/doorclosing.ogv"
+const WEST_WING_TESLA_VIDEO := "res://assets/Videosandgifs/Teslagate.ogv"
+const WEST_WING_FADE_OUT_SEC := 0.6
+const WEST_WING_FADE_HOLD_SEC := 0.15
+const WEST_WING_FADE_IN_SEC := 0.8
+const WEST_WING_DOOR_SLAM_SETTLE_SEC := 0.4
 
 var _corridor_transition_running: bool = false
 
@@ -180,7 +195,7 @@ func _on_scene_hotspot_pressed(zone: HotspotZone) -> void:
 		return
 	zone.flash_click()
 	var hs: Dictionary = zone.to_dictionary()
-	if hs.get("id", "") == "door_r_far" and GameState.has_flag("chase_ready_to_leave"):
+	if _map_id == "hall_papers" and hs.get("id", "") == "door_r_far" and GameState.has_flag("chase_ready_to_leave"):
 		hs["type"] = "exit"
 		hs["target_map"] = "corridor_forward"
 		hs["knot"] = "hall_forward_enter"
@@ -245,12 +260,14 @@ func _on_hotspot_pressed(hs: Dictionary) -> void:
 	if not GameState.has_flag("tutorial_seen_click"):
 		GameState.set_flag("tutorial_seen_click")
 	_last_knot = hs.get("knot", "")
-	if hs.get("id", "") == "door_r_far":
+	if _map_id == "hall_papers" and hs.get("id", "") == "door_r_far":
 		if GameState.has_flag("chase_ready_to_leave"):
 			_launch_corridor_forward_transition(_briefing_knot_for_door())
 			return
 		if GameState.has_flag("hall_door_r_far_open"):
 			return
+	if _map_id == "corridor_forward" and _handle_corridor3_door(hs):
+		return
 	match hs.get("type", "examine"):
 		"pickup":
 			_handle_pickup(hs)
@@ -383,6 +400,20 @@ func _on_dialogue_ended(ended_knot: String) -> void:
 		_enable_free_exploration()
 		call_deferred("_show_side_escort_after_briefing")
 		return
+	if knot in CORRIDOR3_DEADEND_KNOTS:
+		if _all_corridor3_doors_tried() and not GameState.has_flag("c3_west_wing_pointed"):
+			GameState.set_flag("c3_west_wing_pointed")
+			GameState.disable_exploration()
+			call_deferred("_start_knot", CORRIDOR3_WEST_WING_KNOT)
+		else:
+			call_deferred("_reconcile_exploration_after_dialogue", knot)
+		return
+	if knot == CORRIDOR3_WEST_WING_KNOT:
+		_run_west_wing_sequence()
+		return
+	if knot == "corridor3_tesla_trapped":
+		# Hold here on the looping Tesla gate — the monster beat takes over next.
+		return
 	if knot == "hall_forward_enter":
 		_launch_corridor_forward_transition(_briefing_knot_for_door())
 		return
@@ -404,6 +435,28 @@ func _briefing_knot_for_door() -> String:
 	if GameState.has_flag("chase_lied_keycard"):
 		return "corridor3_chase_briefing_harsh"
 	return "corridor3_chase_briefing_gentle"
+
+
+## In Corridor 3 every side door is a dead end: the way back is blocked by Chase,
+## the rest are locked. Each click is tracked so Chase can point on once all tried.
+func _handle_corridor3_door(hs: Dictionary) -> bool:
+	var id := str(hs.get("id", ""))
+	if not CORRIDOR3_DEADEND_DOORS.has(id):
+		return false
+	if GameState.has_flag("c3_west_wing_pointed"):
+		# Past the point of no return; ignore stray door clicks during the cutscene.
+		return true
+	var entry: Dictionary = CORRIDOR3_DEADEND_DOORS[id]
+	GameState.set_flag(str(entry["flag"]))
+	_start_knot(str(entry["knot"]))
+	return true
+
+
+func _all_corridor3_doors_tried() -> bool:
+	for id in CORRIDOR3_DEADEND_DOORS:
+		if not GameState.has_flag(str(CORRIDOR3_DEADEND_DOORS[id]["flag"])):
+			return false
+	return true
 
 
 func _run_archives_departure() -> void:
@@ -492,6 +545,57 @@ func _get_map_transition() -> Node:
 	if nodes.is_empty():
 		return null
 	return nodes[0]
+
+
+func _hide_dialogue_box_now() -> void:
+	if not has_node("%DialogueBox"):
+		return
+	var box := get_node("%DialogueBox") as Control
+	if box:
+		box.hide()
+
+
+func _get_scene_video() -> Node:
+	var nodes := get_tree().get_nodes_in_group("scene_video")
+	if nodes.is_empty():
+		return null
+	return nodes[0]
+
+
+## The West wing approach: behind a fade, reveal a large open Tesla gate that
+## slams shut once, then crackles on a loop until the scene moves on (monster beat).
+func _run_west_wing_sequence() -> void:
+	if not is_inside_tree():
+		return
+	GameState.disable_exploration()
+	GameState.set_flag("west_wing_reached")
+	# The just-ended West-wing dialogue box only hides on a deferred call, which
+	# would otherwise linger for one frame as the fade/video kicks in. Drop it now.
+	_hide_dialogue_box_now()
+	var video := _get_scene_video()
+	var transition := _get_map_transition()
+	if transition:
+		await transition.fade_to_black(WEST_WING_FADE_OUT_SEC, WEST_WING_FADE_HOLD_SEC)
+	if not is_inside_tree():
+		return
+	# Hide Chase/overlays of the old corridor behind the full-screen video.
+	if video and video.has_method("play_clip"):
+		video.play_clip(WEST_WING_DOOR_VIDEO, false)
+	if transition:
+		await transition.fade_from_black(WEST_WING_FADE_IN_SEC)
+	if video and video.has_method("play_clip"):
+		# Wait for the door to finish slamming shut, then hold a beat.
+		if not video.is_finished():
+			await video.sequence_finished
+		DialogueManager.screen_shake_requested.emit("medium")
+		await get_tree().create_timer(WEST_WING_DOOR_SLAM_SETTLE_SEC).timeout
+		if not is_inside_tree():
+			return
+		# The gate is sealed; loop the Tesla arc until the next beat takes over.
+		video.play_clip(WEST_WING_TESLA_VIDEO, true)
+	if not is_inside_tree():
+		return
+	_start_knot("corridor3_tesla_trapped")
 
 
 func _show_side_escort_after_briefing() -> void:

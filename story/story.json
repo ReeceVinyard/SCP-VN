@@ -646,7 +646,11 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Labs 22–31. Something chemical burns your sinuses. Whatever breached containment, it didn't stay in one room."
+		  "text": "More Labs. Something chemical burns your sinuses. You try the reader—dead. The door's locked tight."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Sealed from the inside when containment broke. That's not our way out—leave it."
 		}
 	  ]
 	},
@@ -654,7 +658,64 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "A sealed lab door. The metal is scorched along the frame, as if something tried to get out—or in."
+		  "text": "A sealed lab door, scorched along the frame as if something tried to get out—or in. It won't budge."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "Locked, and not the way we're going. Keep looking."
+		}
+	  ]
+	},
+	"corridor3_back_blocked": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Hey—wrong way. That's back toward the block we just cleared. There's nothing behind us but locked labs and whatever's loose in them."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "We don't backtrack. We find the exit. Try the doors ahead."
+		}
+	  ]
+	},
+	"corridor3_west_wing": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "All of them sealed. Figures. The signage said the West Wing is this way—Labs 1 through 7."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "If there's a stairwell up and out of the Archives, it's through there. Stay close to me."
+		}
+	  ]
+	},
+	"corridor3_tesla_trapped": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The corridor opens onto a wide doorway—standing open, darkness beyond. You're barely through when the frame screams and the door crashes down, sealing the gap."
+		},
+		{
+		  "speaker": "",
+		  "text": "Arcs of blue light crawl across its surface, snapping and humming. A Tesla gate—live."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "A containment gate. Nothing on the index gets past one of these alive... which means we're on the wrong side of it now. We can't go back."
+		},
+		{
+		  "speaker": "",
+		  "text": "Somewhere behind you, back from whence you came, something shifts—a slow, dragging scrape of weight across concrete, then a wet, clicking exhale.",
+		  "tags": ["sfx:anomaly"]
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "...Quiet. Don't move."
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "That's not the gate. Something's loose in here with us—wandering. And it just heard the door come down."
 		}
 	  ]
 	},
@@ -670,7 +731,7 @@
 	  "lines": [
 		{
 		  "speaker": "",
-		  "text": "Directional signage: Research Wing C — Authorized Personnel Only. Someone scratched EVAC through the middle in red paint."
+		  "text": "Directional signage: an arrow left for the WEST WING, another ahead for LABS 1–7. Someone's scratched EVAC across it in red paint."
 		}
 	  ]
 	},

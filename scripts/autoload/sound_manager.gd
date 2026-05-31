@@ -12,6 +12,9 @@ const SFX := {
 	"memory_unlocked": "res://assets/Sound effects/Memory unlocked.mp3",
 	"paper_rustle": "res://assets/Sound effects/Paper rustle.mp3",
 	"metal_stair": "res://assets/Sound effects/Metal stair.mp3",
+	# Placeholder: the wandering anomaly Chase hears past the Tesla gate. Drop the
+	# file at this path (or tell me the real name) and it plays automatically.
+	"anomaly": "res://assets/Sound effects/Anomaly.mp3",
 }
 
 const POOL_SIZE := 6
