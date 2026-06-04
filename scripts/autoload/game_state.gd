@@ -42,6 +42,21 @@ const FLAG_DEFAULTS := {
 	"c3_tried_r_close": false,
 	"c3_west_wing_pointed": false,
 	"west_wing_reached": false,
+	# --- Hunt sequence ---------------------------------------------------------
+	"chase_dead": false,
+	"took_pistol": false,
+	"took_dogtags": false,
+	"hunt_escape_done": false,
+	"reached_staircase": false,
+	"reached_security_room": false,
+	"checked_cameras": false,
+	"vent_opened": false,
+	"reached_storage_room": false,
+	"computer_unlocked": false,
+	# --- Security terminal: elevator access toggles (off by default) ------------
+	"elevator_office": false,
+	"elevator_lab": false,
+	"elevator_maintenance": false,
 }
 
 var current_map_id: String = "archives"
@@ -53,6 +68,14 @@ var selected_item_id: String = ""
 var exploration_enabled: bool = false
 var id_variant: String = "male"
 var opening_cinematic_done: bool = false
+## Walkie-talkie charge (percent). Found used at 75%; drains as it's used. Drives
+## which battery icon shows in the inventory (see ItemRegistry.walkie_icon_for_battery).
+var walkie_battery: int = 75
+## Security-room vent: bit mask — bit i set when screw i (0–3) has been removed.
+var vent_screws_mask: int = 0
+## Transient hand-off from the title screen to main.tscn: "new" or "load".
+## Not persisted; consumed once by main.gd on boot.
+var boot_request: String = ""
 
 var _picked_hotspots: Dictionary = {}
 ## Recovered memory fragments: fragment_id -> true. See MemoryRegistry.
@@ -73,6 +96,8 @@ func reset_run() -> void:
 	exploration_enabled = false
 	id_variant = "male"
 	opening_cinematic_done = false
+	walkie_battery = 75
+	vent_screws_mask = 0
 	_picked_hotspots.clear()
 	memory_fragments.clear()
 	_emit_state_refresh()
@@ -104,6 +129,8 @@ func capture_save_data() -> Dictionary:
 		"exploration_enabled": exploration_enabled,
 		"id_variant": id_variant,
 		"opening_cinematic_done": opening_cinematic_done,
+		"walkie_battery": walkie_battery,
+		"vent_screws_mask": vent_screws_mask,
 		"picked_hotspots": picked_out,
 		"memory_fragments": memory_out,
 	}
@@ -135,6 +162,8 @@ func apply_save_data(data: Variant) -> bool:
 		selected_item_id = saved_selected
 	exploration_enabled = bool(data.get("exploration_enabled", false))
 	opening_cinematic_done = bool(data.get("opening_cinematic_done", true))
+	walkie_battery = int(data.get("walkie_battery", 75))
+	vent_screws_mask = int(data.get("vent_screws_mask", 0)) & 0xF
 	_picked_hotspots.clear()
 	var picked: Variant = data.get("picked_hotspots", {})
 	if typeof(picked) == TYPE_DICTIONARY:
@@ -160,6 +189,8 @@ func _load_inventory_list(raw: Variant) -> Array[String]:
 		return result
 	for entry in raw:
 		var item_id := str(entry)
+		if item_id == "vent_tool":
+			item_id = "screwdriver"
 		if ItemRegistry.ITEMS.has(item_id) and item_id not in result:
 			result.append(item_id)
 	return result
@@ -199,6 +230,26 @@ func unlocked_memory_count() -> int:
 
 func total_memory_count() -> int:
 	return MemoryRegistry.total_count()
+
+
+func is_vent_screw_removed(index: int) -> bool:
+	if index < 0 or index > 3:
+		return false
+	return (vent_screws_mask & (1 << index)) != 0
+
+
+func mark_vent_screw_removed(index: int) -> void:
+	if index < 0 or index > 3:
+		return
+	vent_screws_mask |= (1 << index)
+
+
+func count_vent_screws_removed() -> int:
+	var count := 0
+	for i in 4:
+		if is_vent_screw_removed(i):
+			count += 1
+	return count
 
 
 func mark_opening_cinematic_done() -> void:

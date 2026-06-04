@@ -719,6 +719,242 @@
 		}
 	  ]
 	},
+	"west_wing_ambush": {
+	  "lines": [
+		{
+		  "speaker": "Chase",
+		  "text": "Move. MOVE—back toward the stairs, now!",
+		  "tags": ["shake:medium"]
+		},
+		{
+		  "speaker": "",
+		  "text": "You turn. Something vast comes out of the dark between heartbeats—no shape your eyes will hold. Chase shoves you sideways and raises his Rifle.",
+		  "tags": ["shake:heavy", "sfx:anomaly"]
+		},
+		{
+		  "speaker": "Chase",
+		  "text": "GO! Don't look back—find the—"
+		},
+		{
+		  "speaker": "",
+		  "text": "The shot cracks once. Then a wet, final sound, and Chase isn't there anymore. His pistol skitters across the floor to your feet. His dog tags land beside it.",
+		  "tags": ["shake:heavy"]
+		},
+		{
+		  "speaker": "",
+		  "text": "There's no time for both. The dark is already shifting toward you. Your hand hovers over the floor—"
+		}
+	  ]
+	},
+	"ambush_took_pistol": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You snatch up the pistol—still warm from his grip—and leave the tags glinting on the concrete. Then you run."
+		}
+	  ]
+	},
+	"ambush_took_dogtags": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You close your fist around the tags and leave the pistol where it fell. It felt wrong to take the gun and leave the man. Then you run."
+		}
+	  ]
+	},
+	"stairs_door_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A door. No time to read the placard—just pick one and move."
+		}
+	  ]
+	},
+	"sec_cameras": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The camera bank flickers between feeds. On one of them, something is moving through the corridor you just left—and it's coming this way. You map its path in your head.",
+		  "tags": ["sfx:anomaly"]
+		}
+	  ]
+	},
+	"sec_door_warn": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The door back to the stairwell. You could run for it—but you already saw what's loose on the camera feeds."
+		},
+		{
+		  "speaker": "",
+		  "text": "Going back out there now is a terrible idea. The vent's the smarter play, if you can get it open in time."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "Leave through the door anyway.",
+		  "next": "sec_door_leave"
+		},
+		{
+		  "text": "Stay in the security room.",
+		  "next": "sec_door_stay"
+		}
+	  ]
+	},
+	"sec_door_leave": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You pull the door open. The stairwell is wrong—too quiet, then a wet scrape of something vast turning toward you.",
+		  "tags": ["sfx:anomaly", "shake:heavy"]
+		}
+	  ]
+	},
+	"sec_door_stay": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You step back from the door. Whatever's hunting out there can wait—you've got work to do in here first."
+		}
+	  ]
+	},
+	"sec_alarm_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A red fire bell on the wall. The pull station's plastic seal is still intact. Nobody pulled it before the evacuation."
+		}
+	  ]
+	},
+	"sec_login_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The desk terminal still shows the Archives security login. No time to hack it—the wall monitors are what you need."
+		}
+	  ]
+	},
+	"sec_notepad_flavor": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A notepad on the desk, pencil stub beside it. Most pages are facility codes; the top sheet just says: log off after shift."
+		}
+	  ]
+	},
+	"sec_ammo": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The drawer slides open on loose rounds rolling in the tray. You sweep them into your pocket. The pistol feels a fraction less useless."
+		}
+	  ]
+	},
+	"sec_ammo_done": {
+	  "lines": [
+		{ "speaker": "", "text": "Just an empty drawer and a few spent casings now." }
+	  ]
+	},
+	"sec_walkie": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A walkie-talkie, still warm with static. Someone, somewhere on another floor, might still be breathing."
+		}
+	  ]
+	},
+	"sec_walkie_done": {
+	  "lines": [
+		{ "speaker": "", "text": "Just static now." }
+	  ]
+	},
+	"sec_tool": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A flat-head screwdriver from the desk drawer. Exactly what you'd need on a vent grille."
+		}
+	  ]
+	},
+	"sec_tool_done": {
+	  "lines": [
+		{ "speaker": "", "text": "You've already taken the screwdriver." }
+	  ]
+	},
+	"sec_vent_locked": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A wall vent, the grille screwed shut. You'd need a screwdriver to get it open."
+		}
+	  ]
+	},
+	"sec_vent_prompt": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "A wall vent at floor level, grille screwed in tight. The duct behind it runs off into the dark—away from the door, away from whatever's out there."
+		}
+	  ],
+	  "choices": [
+		{
+		  "text": "I could use the screwdriver.",
+		  "next": "sec_vent_use"
+		},
+		{
+		  "text": "Leave it alone.",
+		  "next": "sec_vent_leave"
+		}
+	  ]
+	},
+	"sec_vent_use": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You wedge the flat-head under the first screw and start working the grille loose."
+		}
+	  ]
+	},
+	"sec_vent_leave": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You leave the grille where it is. The vent will still be here if you change your mind."
+		}
+	  ]
+	},
+	"sec_vent_opened": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "The screws give one by one and the grille drops away, clattering onto the floor. Where it was, a black duct gapes open in the wall—just big enough to crawl into."
+		},
+		{
+		  "speaker": "",
+		  "text": "(Click the opening to climb inside.)"
+		}
+	  ]
+	},
+	"storage_look": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "Shelves of dead supplies and dust. For the first time in a while, the dark in here is just dark."
+		}
+	  ]
+	},
+	"storage_arrival": {
+	  "lines": [
+		{
+		  "speaker": "",
+		  "text": "You drop out of the vent onto cold concrete and lie still, lungs burning. No dragging. No clicking. Just your own heartbeat."
+		},
+		{
+		  "speaker": "",
+		  "text": "A storage room. Sealed on one side. Safe—for now. You let yourself breathe, and Chase's tags bite into your closed fist."
+		}
+	  ]
+	},
 	"corridor3_vent_flavor": {
 	  "lines": [
 		{

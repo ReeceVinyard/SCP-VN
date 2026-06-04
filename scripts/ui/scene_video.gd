@@ -30,6 +30,12 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func play_clip(path: String, loop: bool) -> void:
+	await play_clip_when_ready(path, loop, false)
+
+
+## Loads and plays a clip, but only becomes visible after the decoder has a frame
+## so the map/dialogue underneath cannot flash through for one frame.
+func play_clip_when_ready(path: String, loop: bool, keep_visible: bool = false) -> void:
 	var clip := load(path) as VideoStream
 	if clip == null:
 		push_warning("scene_video: cannot load %s (open the editor to import it)" % path)
@@ -38,9 +44,23 @@ func play_clip(path: String, loop: bool) -> void:
 		return
 	_loop = loop
 	_finished = false
+	if not keep_visible:
+		visible = false
 	stream = clip
-	visible = true
 	play()
+	await _wait_for_decoded_frame()
+	visible = true
+
+
+func _wait_for_decoded_frame() -> void:
+	for _attempt in 90:
+		if not is_inside_tree():
+			return
+		await get_tree().process_frame
+		var tex := get_video_texture()
+		if tex != null and tex.get_width() > 0 and tex.get_height() > 0:
+			return
+	await get_tree().create_timer(0.08).timeout
 
 
 func is_finished() -> bool:

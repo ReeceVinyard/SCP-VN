@@ -205,12 +205,8 @@ func _draw() -> void:
 			if scale != Vector2.ONE or absf(rotation) > 0.001:
 				draw_rect(rect, Color(1.0, 0.45, 0.2, 0.55), false, 3.0)
 		return
-	if _use_art_overlay:
-		return
-	if _flash_strength > 0.0:
-		draw_rect(rect, Color(1.0, 0.95, 0.7, 0.2 + _flash_strength * 0.45), true)
-	elif _hovering:
-		draw_rect(rect, Color(0.9, 0.85, 0.5, 0.28), true)
+	# In-game, interactables are conveyed entirely by the glowing art overlays +
+	# the pointer cursor. No fill box is drawn so every hotspot reads identically.
 
 
 func _is_interaction_enabled() -> bool:

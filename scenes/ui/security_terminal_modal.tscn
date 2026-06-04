@@ -1,0 +1,362 @@
+[gd_scene format=3 uid="uid://sjtnrfldg4sq"]
+
+[ext_resource type="Script" path="res://scripts/ui/security_terminal_modal.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/open folder.png" id="2_folder"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/access button.png" id="3_hiaccess"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/personnel records.png" id="4_hipersonnel"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/incidentlogs.png" id="5_hiincident"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/containment protocols.png" id="6_hicontain"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/access_window_bg.png" id="7_accessbg"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/ACCESS_OFFICE-OFF.png" id="8_officeoff"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/ACCESS_LAB-OFF.png" id="9_laboff"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/ACCESS_MAIN-OFF.png" id="10_mainoff"]
+[ext_resource type="Texture2D" path="res://assets/Security computer bits/ACCESS_CLOSE_BUTTON.png" id="11_accessclose"]
+
+[node name="SecurityTerminalModal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="ScreenBg" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="LoginField" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.335
+anchor_top = 0.64
+anchor_right = 0.735
+anchor_bottom = 0.752
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+placeholder_text = "Password"
+alignment = 0
+caret_blink = true
+
+[node name="LoginError" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.26
+anchor_top = 0.775
+anchor_right = 0.75
+anchor_bottom = 0.83
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.85, 0.25, 0.25, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="DesktopIcons" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HiAccess" type="TextureRect" parent="DesktopIcons"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_hiaccess")
+expand_mode = 1
+
+[node name="HiPersonnel" type="TextureRect" parent="DesktopIcons"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_hipersonnel")
+expand_mode = 1
+
+[node name="HiIncident" type="TextureRect" parent="DesktopIcons"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_hiincident")
+expand_mode = 1
+
+[node name="HiContainment" type="TextureRect" parent="DesktopIcons"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_hicontain")
+expand_mode = 1
+
+[node name="AccessButton" type="Button" parent="DesktopIcons"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.005
+anchor_top = 0.02
+anchor_right = 0.14
+anchor_bottom = 0.245
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="PersonnelButton" type="Button" parent="DesktopIcons"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.005
+anchor_top = 0.255
+anchor_right = 0.14
+anchor_bottom = 0.45
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="IncidentButton" type="Button" parent="DesktopIcons"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.005
+anchor_top = 0.455
+anchor_right = 0.14
+anchor_bottom = 0.635
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="ContainmentButton" type="Button" parent="DesktopIcons"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.005
+anchor_top = 0.645
+anchor_right = 0.14
+anchor_bottom = 0.88
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="FolderWindow" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_folder")
+expand_mode = 1
+
+[node name="WindowClose" type="Button" parent="FolderWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.748
+anchor_top = 0.03
+anchor_right = 0.79
+anchor_bottom = 0.085
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="WindowTitle" type="Label" parent="FolderWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.235
+anchor_top = 0.032
+anchor_right = 0.74
+anchor_bottom = 0.075
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.12, 0.14, 0.2, 1)
+theme_override_font_sizes/font_size = 22
+vertical_alignment = 1
+
+[node name="FileList" type="VBoxContainer" parent="FolderWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.238
+anchor_top = 0.115
+anchor_right = 0.762
+anchor_bottom = 0.88
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="DocText" type="RichTextLabel" parent="FolderWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.238
+anchor_top = 0.105
+anchor_right = 0.765
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_colors/default_color = Color(0.1, 0.13, 0.18, 1)
+theme_override_font_sizes/normal_font_size = 22
+scroll_active = true
+
+[node name="AccessWindow" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_accessbg")
+expand_mode = 1
+
+[node name="RowOffice" type="TextureRect" parent="AccessWindow"]
+unique_name_in_owner = true
+modulate = Color(0.86, 0.18, 0.18, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("8_officeoff")
+expand_mode = 1
+
+[node name="RowLab" type="TextureRect" parent="AccessWindow"]
+unique_name_in_owner = true
+modulate = Color(0.86, 0.18, 0.18, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_laboff")
+expand_mode = 1
+
+[node name="RowMaint" type="TextureRect" parent="AccessWindow"]
+unique_name_in_owner = true
+modulate = Color(0.86, 0.18, 0.18, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_mainoff")
+expand_mode = 1
+
+[node name="AccessCloseHi" type="TextureRect" parent="AccessWindow"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("11_accessclose")
+expand_mode = 1
+
+[node name="RowOfficeBtn" type="Button" parent="AccessWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.29
+anchor_top = 0.34
+anchor_right = 0.71
+anchor_bottom = 0.41
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="RowLabBtn" type="Button" parent="AccessWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.29
+anchor_top = 0.49
+anchor_right = 0.71
+anchor_bottom = 0.57
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="RowMaintBtn" type="Button" parent="AccessWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.29
+anchor_top = 0.65
+anchor_right = 0.71
+anchor_bottom = 0.72
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="AccessClose" type="Button" parent="AccessWindow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.74
+anchor_top = 0.03
+anchor_right = 0.795
+anchor_bottom = 0.085
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true

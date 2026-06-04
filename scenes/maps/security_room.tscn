@@ -1,0 +1,191 @@
+[gd_scene format=3 uid="uid://baup61ax2l382"]
+
+[ext_resource type="Texture2D" uid="uid://dd1tst3kweuqc" path="res://assets/backgrounds/security.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://co1hv4jns1u" path="res://scripts/hotspot_zone.gd" id="2_hotspot"]
+[ext_resource type="Script" uid="uid://6k81uajqec4" path="res://scripts/maps/interactable_overlay_layer.gd" id="3_overlays"]
+[ext_resource type="Script" uid="uid://bq51id45y1wx6" path="res://scripts/maps/map_editor_canvas.gd" id="4_canvas"]
+
+[node name="SecurityRoomMap" type="Control" unique_id=599032628]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_canvas")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1110308744]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+
+[node name="InteractableOverlays" type="Control" parent="." unique_id=526211599]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_overlays")
+map_id = "security_room"
+
+[node name="Hotspots" type="Control" parent="." unique_id=1548472987]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Door" type="Control" parent="Hotspots" unique_id=329673901]
+layout_mode = 1
+anchor_left = 0.1375
+anchor_top = 0.1444
+anchor_right = 0.3156
+anchor_bottom = 0.8884
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door to stairwell"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "door"
+label_text = "Door to stairwell"
+knot = "sec_door_warn"
+
+[node name="Alarm" type="Control" parent="Hotspots" unique_id=87189132]
+layout_mode = 1
+anchor_left = 0.1047
+anchor_top = 0.4861
+anchor_right = 0.1266
+anchor_bottom = 0.5389
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Fire alarm"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "alarm"
+label_text = "Fire alarm"
+knot = "sec_alarm_flavor"
+
+[node name="Cameras" type="Control" parent="Hotspots" unique_id=1274252150]
+layout_mode = 1
+anchor_left = 0.5266
+anchor_top = 0.1028
+anchor_right = 0.9985
+anchor_bottom = 0.4584
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Camera bank"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "cameras"
+label_text = "Camera bank"
+knot = "sec_cameras"
+
+[node name="Login" type="Control" parent="Hotspots" unique_id=1461081176]
+layout_mode = 1
+anchor_left = 0.6906
+anchor_top = 0.4611
+anchor_right = 0.8328
+anchor_bottom = 0.6889
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Security terminal"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "login"
+label_text = "Security terminal"
+knot = "sec_login_flavor"
+
+[node name="Ammo" type="Control" parent="Hotspots" unique_id=301218470]
+layout_mode = 1
+anchor_left = 0.4422
+anchor_top = 0.762
+anchor_right = 0.4985
+anchor_bottom = 0.848
+offset_left = 7.976013
+offset_top = -34.960083
+offset_right = 7.976013
+offset_bottom = -34.960083
+grow_horizontal = 0
+grow_vertical = 0
+rotation = 0.3060619
+scale = Vector2(1.0692497, 0.56538504)
+tooltip_text = "Desk drawer"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "ammo"
+label_text = "Desk drawer"
+knot = "sec_ammo"
+empty_knot = "sec_ammo_done"
+
+[node name="Walkie" type="Control" parent="Hotspots" unique_id=1708336971]
+layout_mode = 1
+anchor_left = 0.7812
+anchor_top = 0.6889
+anchor_right = 0.8546
+anchor_bottom = 0.7417
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Walkie-talkie"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "walkie"
+label_text = "Walkie-talkie"
+knot = "sec_walkie"
+empty_knot = "sec_walkie_done"
+
+[node name="Notepad" type="Control" parent="Hotspots" unique_id=68993695]
+layout_mode = 1
+anchor_left = 0.8406
+anchor_top = 0.7139
+anchor_right = 0.9484
+anchor_bottom = 0.7945
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Notepad"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "notepad"
+label_text = "Notepad"
+knot = "sec_notepad_flavor"
+
+[node name="Tool" type="Control" parent="Hotspots" unique_id=1823953446]
+layout_mode = 1
+anchor_left = 0.4422
+anchor_top = 0.85
+anchor_right = 0.4985
+anchor_bottom = 0.9361
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Desk drawer"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "tool"
+label_text = "Desk drawer"
+knot = "sec_tool"
+empty_knot = "sec_tool_done"
+
+[node name="Vent" type="Control" parent="Hotspots" unique_id=1527905045]
+layout_mode = 1
+anchor_top = 0.6611
+anchor_right = 0.1031
+anchor_bottom = 0.9055
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Wall vent"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "vent"
+label_text = "Wall vent"
+knot = "sec_vent_locked"

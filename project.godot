@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Archives"
 config/description="Visual novel / exploration hybrid — Archives prologue"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/ui/title_screen.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -26,6 +26,7 @@ GameState="*res://scripts/autoload/game_state.gd"
 DialogueManager="*res://scripts/autoload/dialogue_manager.gd"
 SaveManager="*res://scripts/autoload/save_manager.gd"
 SoundManager="*res://scripts/autoload/sound_manager.gd"
+HuntManager="*res://scripts/autoload/hunt_manager.gd"
 
 [display]
 

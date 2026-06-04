@@ -6,6 +6,7 @@ const _CharacterRegistry = preload("res://scripts/data/character_registry.gd")
 signal map_changed(map_id: String)
 signal naming_required
 signal document_requested(item_id: String, grant_item_on_close: bool)
+signal computer_login_requested
 
 @onready var _bg_color: ColorRect = %BackgroundColor
 @onready var _bg_image: TextureRect = %BackgroundImage
@@ -50,6 +51,26 @@ const WEST_WING_FADE_OUT_SEC := 0.6
 const WEST_WING_FADE_HOLD_SEC := 0.15
 const WEST_WING_FADE_IN_SEC := 0.8
 const WEST_WING_DOOR_SLAM_SETTLE_SEC := 0.4
+
+## --- Hunt sequence (Chase's death -> staircase -> security room -> storage) ---
+## Per-beat timer windows. Placeholders — tune in playtest (the player never sees
+## the number; rising audio is the only cue).
+const STAIRCASE_HUNT_SEC := 8.0
+const STAIRCASE_BANNER := "FIND THE SECURITY ROOM"
+const HUNT_FADE_OUT_SEC := 0.5
+const HUNT_FADE_HOLD_SEC := 0.15
+const HUNT_FADE_IN_SEC := 0.7
+## How long the "use the screwdriver" vent interaction takes (the rattle SFX plays
+## across this window before the grille comes off).
+const VENT_UNSCREW_SEC := 5.0
+## Background variant shown once the security-room vent is open (grille on floor).
+const SECURITY_VENT_OPEN_BG := "res://assets/backgrounds/secuirty vent floor.png"
+## Security-room hotspot id -> item it grants (picked up silently, no found-modal).
+const SECURITY_PICKUPS := {
+	"ammo": "ammo",
+	"walkie": "walkie_talkie",
+	"tool": "screwdriver",
+}
 
 var _corridor_transition_running: bool = false
 
@@ -108,6 +129,7 @@ func load_map(map_id: String) -> void:
 		_load_legacy_map(data)
 
 	map_changed.emit(map_id)
+	call_deferred("_on_hunt_map_loaded", map_id)
 
 
 func _clear_map() -> void:
@@ -171,6 +193,12 @@ func _find_hotspot_zones(node: Node) -> Array:
 
 
 func try_handle_map_click(event: InputEvent) -> bool:
+	var pickup := _get_ambush_pickup()
+	if pickup is Control and (pickup as Control).visible:
+		return false
+	var vent_unscrew := _get_vent_unscrew()
+	if vent_unscrew is Control and (vent_unscrew as Control).visible:
+		return false
 	if not (event is InputEventMouseButton):
 		return false
 	var mb := event as InputEventMouseButton
@@ -267,6 +295,10 @@ func _on_hotspot_pressed(hs: Dictionary) -> void:
 		if GameState.has_flag("hall_door_r_far_open"):
 			return
 	if _map_id == "corridor_forward" and _handle_corridor3_door(hs):
+		return
+	if _map_id == "staircase" and _handle_staircase_door(hs):
+		return
+	if _map_id == "security_room" and _handle_security_room(hs):
 		return
 	match hs.get("type", "examine"):
 		"pickup":
@@ -409,10 +441,28 @@ func _on_dialogue_ended(ended_knot: String) -> void:
 			call_deferred("_reconcile_exploration_after_dialogue", knot)
 		return
 	if knot == CORRIDOR3_WEST_WING_KNOT:
+		_prepare_west_wing_cutscene()
 		_run_west_wing_sequence()
 		return
 	if knot == "corridor3_tesla_trapped":
-		# Hold here on the looping Tesla gate — the monster beat takes over next.
+		# The Tesla gate is sealed; the anomaly strikes. Chase dies here.
+		if not GameState.has_flag("chase_dead"):
+			call_deferred("_start_knot", "west_wing_ambush")
+		return
+	if knot == "west_wing_ambush":
+		_show_ambush_pickup()
+		return
+	if knot in ["ambush_took_pistol", "ambush_took_dogtags"]:
+		_on_chase_died()
+		return
+	if knot == "sec_vent_use":
+		_run_vent_unscrew()
+		return
+	if knot == "sec_door_leave":
+		HuntManager.kill("left_anyway")
+		return
+	if knot == "sec_door_stay":
+		call_deferred("_reconcile_exploration_after_dialogue", knot)
 		return
 	if knot == "hall_forward_enter":
 		_launch_corridor_forward_transition(_briefing_knot_for_door())
@@ -547,12 +597,53 @@ func _get_map_transition() -> Node:
 	return nodes[0]
 
 
+func _get_dialogue_box() -> Control:
+	if has_node("%DialogueBox"):
+		return get_node("%DialogueBox") as Control
+	for node in get_tree().get_nodes_in_group("dialogue_box"):
+		if node is Control:
+			return node as Control
+	return null
+
+
 func _hide_dialogue_box_now() -> void:
-	if not has_node("%DialogueBox"):
+	var box := _get_dialogue_box()
+	if box == null:
 		return
-	var box := get_node("%DialogueBox") as Control
-	if box:
+	if box.has_method("hide_for_cutscene"):
+		box.hide_for_cutscene()
+	else:
 		box.hide()
+
+
+func _prepare_west_wing_cutscene() -> void:
+	_hide_dialogue_box_now()
+	_hide_all_character_presence_now()
+	if _map_host:
+		_map_host.visible = false
+
+
+func _restore_map_after_west_wing_cutscene() -> void:
+	if _map_host:
+		_map_host.visible = true
+
+
+func _hide_all_character_presence_now() -> void:
+	GameState.set_flag("chase_escort_visible", false)
+	GameState.set_flag("chase_briefing_center_visible", false)
+	GameState.set_flag("chase_at_door_visible", false)
+	for child in _map_host.get_children():
+		_hide_presence_in_node(child)
+
+
+func _hide_presence_in_node(node: Node) -> void:
+	var layer := node.get_node_or_null("InteractableOverlays")
+	if layer:
+		for child in layer.get_children():
+			if child is CharacterPresenceZone:
+				(child as CharacterPresenceZone).hide_presence()
+	for child in node.get_children():
+		_hide_presence_in_node(child)
 
 
 func _get_scene_video() -> Node:
@@ -562,6 +653,306 @@ func _get_scene_video() -> Node:
 	return nodes[0]
 
 
+func _get_run_cinematic() -> Node:
+	var nodes := get_tree().get_nodes_in_group("run_cinematic")
+	if nodes.is_empty():
+		return null
+	return nodes[0]
+
+
+func _get_ambush_pickup() -> Node:
+	var nodes := get_tree().get_nodes_in_group("ambush_pickup")
+	if nodes.is_empty():
+		return null
+	return nodes[0]
+
+
+func _show_ambush_pickup() -> void:
+	if not is_inside_tree():
+		return
+	GameState.disable_exploration()
+	_hide_dialogue_box_now()
+	var video := _get_scene_video()
+	if video and video.has_method("stop_clip"):
+		video.stop_clip()
+	var overlay := _get_ambush_pickup()
+	if overlay == null or not overlay.has_method("show_pickup"):
+		push_warning("ambush_pickup overlay missing — cannot show gun/dogtag choice")
+		return
+	if overlay.pickup_chosen.is_connected(_on_ambush_pickup_chosen):
+		overlay.pickup_chosen.disconnect(_on_ambush_pickup_chosen)
+	overlay.pickup_chosen.connect(_on_ambush_pickup_chosen, CONNECT_ONE_SHOT)
+	overlay.show_pickup()
+
+
+func _on_ambush_pickup_chosen(choice: String) -> void:
+	if choice == "pistol":
+		GameState.set_flag("took_pistol")
+		GameState.add_item("chase_pistol", false)
+		_start_knot("ambush_took_pistol")
+	elif choice == "dogtags":
+		GameState.set_flag("took_dogtags")
+		GameState.add_item("chase_dogtags", false)
+		_start_knot("ambush_took_dogtags")
+	else:
+		push_warning("ambush_pickup: unknown choice %s" % choice)
+
+
+## Chase falls to the anomaly. Grab his gear (no found-modal — it's frantic) and
+## hand off to the uncontrolled escape run that drops us at the staircase.
+func _on_chase_died() -> void:
+	# The item the player chose (pistol or dog tags) is granted by the calling
+	# ambush_took_* branch; only one is taken.
+	GameState.set_flag("chase_dead")
+	GameState.disable_exploration()
+	_run_escape_to_stairs()
+
+
+func _run_escape_to_stairs() -> void:
+	if not is_inside_tree():
+		return
+	# Kill the looping Tesla gate video behind us.
+	var video := _get_scene_video()
+	if video and video.has_method("stop_clip"):
+		video.stop_clip()
+	# Uncontrolled sprint (placeholder frames until the blurry run art is in).
+	var run := _get_run_cinematic()
+	if run and run.has_method("play_run"):
+		await run.play_run(PackedStringArray(), 1.0)
+	if not is_inside_tree():
+		return
+	GameState.set_flag("hunt_escape_done")
+	var transition := _get_map_transition()
+	if transition:
+		await transition.fade_to_black(HUNT_FADE_OUT_SEC, HUNT_FADE_HOLD_SEC)
+	load_map("staircase")
+	# Capture immediately — a deferred _on_hunt_map_loaded can run after the player
+	# has already loaded security_room and would snapshot the wrong map for Retry.
+	_setup_staircase_hunt_checkpoint()
+	if transition:
+		await transition.fade_from_black(HUNT_FADE_IN_SEC)
+
+
+## Runs after any map loads. Starts/clears the per-beat hunt depending on which
+## hunt map we just entered. Harmless no-op for non-hunt maps.
+func _on_hunt_map_loaded(map_id: String) -> void:
+	if not is_inside_tree():
+		return
+	if GameState.has_flag("reached_storage_room"):
+		return
+	match map_id:
+		"staircase":
+			_setup_staircase_hunt_checkpoint()
+		"security_room":
+			# Safe room: the staircase beat already ended, so no timer/hunt audio
+			# runs here. The only danger is leaving the vent without checking cameras.
+			GameState.set_flag("reached_security_room")
+			GameState.enable_exploration()
+			if GameState.has_flag("vent_opened"):
+				_apply_security_vent_open_background()
+		"storage_room":
+			GameState.set_flag("reached_storage_room")
+			SaveManager.clear_checkpoint()
+			GameState.enable_exploration()
+			_start_knot("storage_arrival")
+
+
+func _setup_staircase_hunt_checkpoint() -> void:
+	GameState.set_flag("reached_staircase")
+	GameState.enable_exploration()
+	SaveManager.set_checkpoint("staircase")
+	if not HuntManager.is_active():
+		HuntManager.start_beat("staircase", STAIRCASE_HUNT_SEC, STAIRCASE_BANNER)
+
+
+## Fallback when Retry is pressed but the in-memory checkpoint was lost (deferred
+## map race). Rewinds hunt progress to the staircase beat and rebuilds the snapshot.
+func rewind_hunt_to_staircase() -> void:
+	GameState.set_flag("reached_security_room", false)
+	GameState.set_flag("checked_cameras", false)
+	GameState.set_flag("vent_opened", false)
+	GameState.vent_screws_mask = 0
+	HuntManager.abort()
+	DialogueManager.force_end()
+	load_map("staircase")
+	_setup_staircase_hunt_checkpoint()
+
+
+## Staircase beat: the security door is the only safe exit. Any other door, or
+## running out of time, gets the player caught. Returns true if handled.
+func _handle_staircase_door(hs: Dictionary) -> bool:
+	if not HuntManager.is_active():
+		return false
+	var hid := str(hs.get("id", ""))
+	if hid == "security_door":
+		# Refresh the hunt retry point while we are still on the staircase map.
+		SaveManager.set_checkpoint("staircase")
+		HuntManager.survive_beat()
+		_go_to_map_with_fade("security_room")
+		return true
+	HuntManager.fail("wrong_door")
+	return true
+
+
+## Security-room beat: grab gear, but you MUST check the cameras before opening the
+## vent or SCP-14 takes you. Returns true if handled.
+func _handle_security_room(hs: Dictionary) -> bool:
+	var hid := str(hs.get("id", ""))
+	if SECURITY_PICKUPS.has(hid):
+		var item_id: String = SECURITY_PICKUPS[hid]
+		if GameState.has_item(item_id) or GameState.is_hotspot_consumed(_map_id, hid):
+			_start_knot(str(hs.get("empty_knot", "")))
+			return true
+		# Route through the standard pickup flow so the item flies into view (the
+		# found-modal slides in); the flavor knot plays after it's dismissed.
+		SoundManager.play("paper_rustle")
+		_pending_pickup = hs.duplicate()
+		GameState.add_item(item_id)
+		return true
+	if hid == "cameras":
+		GameState.set_flag("checked_cameras")
+		_start_knot("sec_cameras")
+		return true
+	if hid == "door":
+		_handle_security_exit_door()
+		return true
+	if hid == "login":
+		# Open the desk terminal (login -> desktop -> folders/documents).
+		computer_login_requested.emit()
+		return true
+	if hid in ["alarm", "notepad"]:
+		_start_knot("sec_%s_flavor" % hid)
+		return true
+	if hid == "vent":
+		_handle_security_vent()
+		return true
+	return false
+
+
+## Exit back toward the stairwell. Without checking the cameras first, the anomaly
+## is an instant kill. After the feeds, the player gets a warning and a choice.
+func _handle_security_exit_door() -> void:
+	if not GameState.has_flag("checked_cameras"):
+		SoundManager.play("anomaly")
+		HuntManager.kill("door_blind")
+		return
+	_start_knot("sec_door_warn")
+
+
+func _handle_security_vent() -> void:
+	# Already open: clicking the exposed opening crawls into the duct.
+	if GameState.has_flag("vent_opened"):
+		_finish_vent_escape()
+		return
+	if not GameState.has_item("screwdriver"):
+		_start_knot("sec_vent_locked")
+		return
+	# The vent is always a safe route — no camera-check gate. Offer the choice
+	# to work the grille loose or leave it.
+	_start_knot("sec_vent_prompt")
+
+
+## "Use the screwdriver": play the rattle SFX across a short timed interaction
+## (cut at exactly VENT_UNSCREW_SEC), then swap the room to the vent-open
+## background variant and let the narration play.
+func _run_vent_unscrew() -> void:
+	if not is_inside_tree():
+		return
+	GameState.disable_exploration()
+	_hide_dialogue_box_now()
+	SoundManager.play_cuttable("vent_open")
+	await get_tree().create_timer(VENT_UNSCREW_SEC).timeout
+	SoundManager.stop_cuttable()
+	if not is_inside_tree():
+		return
+	GameState.set_flag("vent_opened")
+	# The grille comes free and clatters to the floor — jolt the screen as it lands.
+	DialogueManager.screen_shake_requested.emit("medium")
+	_apply_security_vent_open_background()
+	_refresh_map_overlays()
+	_start_knot("sec_vent_opened")
+
+
+## Swap the security-room background to the variant that shows the grille on the
+## floor and the duct open. Re-applied on map (re)load while vent_opened is set.
+func _apply_security_vent_open_background() -> void:
+	var bg := _security_background()
+	if bg == null:
+		return
+	if not ResourceLoader.exists(SECURITY_VENT_OPEN_BG):
+		push_warning("Vent-open background missing: %s" % SECURITY_VENT_OPEN_BG)
+		return
+	var tex := load(SECURITY_VENT_OPEN_BG) as Texture2D
+	if tex:
+		bg.texture = tex
+
+
+func _security_background() -> TextureRect:
+	for child in _map_host.get_children():
+		var bg := _find_security_background(child)
+		if bg != null:
+			return bg
+	return null
+
+
+func _find_security_background(node: Node) -> TextureRect:
+	var layer := node.get_node_or_null("InteractableOverlays")
+	if layer != null and str(layer.get("map_id")) == "security_room":
+		var bg := node.get_node_or_null("Background")
+		return bg as TextureRect if bg is TextureRect else null
+	for child in node.get_children():
+		var found := _find_security_background(child)
+		if found != null:
+			return found
+	return null
+
+
+func _get_vent_unscrew() -> Node:
+	var nodes := get_tree().get_nodes_in_group("vent_unscrew")
+	if nodes.is_empty():
+		return null
+	return nodes[0]
+
+
+func _show_vent_unscrew() -> void:
+	if not is_inside_tree():
+		return
+	GameState.disable_exploration()
+	_hide_dialogue_box_now()
+	var overlay := _get_vent_unscrew()
+	if overlay == null or not overlay.has_method("show_unscrew"):
+		push_warning("vent_unscrew overlay missing")
+		return
+	if overlay.unscrew_complete.is_connected(_on_vent_unscrew_complete):
+		overlay.unscrew_complete.disconnect(_on_vent_unscrew_complete)
+	overlay.unscrew_complete.connect(_on_vent_unscrew_complete, CONNECT_ONE_SHOT)
+	overlay.show_unscrew()
+
+
+func _on_vent_unscrew_complete() -> void:
+	_start_knot("sec_vent_opened")
+
+
+func _finish_vent_escape() -> void:
+	if not is_inside_tree():
+		return
+	GameState.set_flag("vent_opened")
+	SoundManager.play("door_opening")
+	_go_to_map_with_fade("storage_room")
+
+
+func _go_to_map_with_fade(map_id: String) -> void:
+	if not is_inside_tree():
+		return
+	GameState.disable_exploration()
+	var transition := _get_map_transition()
+	if transition:
+		await transition.fade_to_black(HUNT_FADE_OUT_SEC, HUNT_FADE_HOLD_SEC)
+	load_map(map_id)
+	if transition:
+		await transition.fade_from_black(HUNT_FADE_IN_SEC)
+
+
 ## The West wing approach: behind a fade, reveal a large open Tesla gate that
 ## slams shut once, then crackles on a loop until the scene moves on (monster beat).
 func _run_west_wing_sequence() -> void:
@@ -569,21 +960,22 @@ func _run_west_wing_sequence() -> void:
 		return
 	GameState.disable_exploration()
 	GameState.set_flag("west_wing_reached")
-	# The just-ended West-wing dialogue box only hides on a deferred call, which
-	# would otherwise linger for one frame as the fade/video kicks in. Drop it now.
-	_hide_dialogue_box_now()
+	_prepare_west_wing_cutscene()
 	var video := _get_scene_video()
 	var transition := _get_map_transition()
 	if transition:
 		await transition.fade_to_black(WEST_WING_FADE_OUT_SEC, WEST_WING_FADE_HOLD_SEC)
 	if not is_inside_tree():
 		return
-	# Hide Chase/overlays of the old corridor behind the full-screen video.
-	if video and video.has_method("play_clip"):
-		video.play_clip(WEST_WING_DOOR_VIDEO, false)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if video and video.has_method("play_clip_when_ready"):
+		await video.play_clip_when_ready(WEST_WING_DOOR_VIDEO, false)
+	elif video and video.has_method("play_clip"):
+		await video.play_clip(WEST_WING_DOOR_VIDEO, false)
 	if transition:
 		await transition.fade_from_black(WEST_WING_FADE_IN_SEC)
-	if video and video.has_method("play_clip"):
+	if video:
 		# Wait for the door to finish slamming shut, then hold a beat.
 		if not video.is_finished():
 			await video.sequence_finished
@@ -591,10 +983,14 @@ func _run_west_wing_sequence() -> void:
 		await get_tree().create_timer(WEST_WING_DOOR_SLAM_SETTLE_SEC).timeout
 		if not is_inside_tree():
 			return
-		# The gate is sealed; loop the Tesla arc until the next beat takes over.
-		video.play_clip(WEST_WING_TESLA_VIDEO, true)
+		# Swap to the looping Tesla arc without hiding the player (avoids a map flash).
+		if video.has_method("play_clip_when_ready"):
+			await video.play_clip_when_ready(WEST_WING_TESLA_VIDEO, true, true)
+		elif video.has_method("play_clip"):
+			await video.play_clip(WEST_WING_TESLA_VIDEO, true)
 	if not is_inside_tree():
 		return
+	_restore_map_after_west_wing_cutscene()
 	_start_knot("corridor3_tesla_trapped")
 
 

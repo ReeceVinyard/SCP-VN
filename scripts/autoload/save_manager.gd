@@ -67,10 +67,21 @@ func load_game(slot: int = SLOT_QUICK) -> bool:
 		push_error("Save file version %d is newer than this build (%d)." % [version, SAVE_VERSION])
 		load_finished.emit(slot, false)
 		return false
-	if not GameState.apply_save_data(payload.get("game_state", {})):
-		push_error("Save game_state failed validation.")
+	if not _apply_payload(payload):
 		load_finished.emit(slot, false)
 		return false
+	load_finished.emit(slot, true)
+	return true
+
+
+## Applies a save-shaped payload (game_state / exploration / dialogue) to the live
+## game. Shared by disk loads and the in-memory hunt checkpoint.
+func _apply_payload(payload: Dictionary) -> bool:
+	if not GameState.apply_save_data(payload.get("game_state", {})):
+		push_error("Save game_state failed validation.")
+		return false
+	# Cancel any in-progress hunt timer so we don't fail right after restoring.
+	HuntManager.abort()
 	DialogueManager.force_end()
 	var exploration := _get_exploration_map()
 	if exploration:
@@ -83,8 +94,42 @@ func load_game(slot: int = SLOT_QUICK) -> bool:
 				exploration.call_deferred("_sync_world_after_load_async")
 	elif exploration and exploration.has_method("stabilize_playback_state"):
 		exploration.stabilize_playback_state()
-	load_finished.emit(slot, true)
 	return true
+
+
+## --- Hunt checkpoint (in-memory; set when the hunt begins) ------------------
+
+var _checkpoint: Dictionary = {}
+
+
+## Snapshots the current run for hunt Retry. Pass `map_id` (e.g. "staircase") so the
+## save stays correct even if a deferred callback runs after a later load_map.
+func set_checkpoint(map_id: String = "") -> void:
+	var exploration := _get_exploration_map()
+	var game_state := GameState.capture_save_data()
+	var exploration_data: Dictionary = exploration.capture_save_data() if exploration else {}
+	if not map_id.is_empty():
+		game_state["current_map_id"] = map_id
+		exploration_data["map_id"] = map_id
+	_checkpoint = {
+		"game_state": game_state,
+		"exploration": exploration_data,
+		"dialogue": DialogueManager.capture_save_data(),
+	}
+
+
+func has_checkpoint() -> bool:
+	return not _checkpoint.is_empty()
+
+
+func clear_checkpoint() -> void:
+	_checkpoint = {}
+
+
+func restore_checkpoint() -> bool:
+	if _checkpoint.is_empty():
+		return false
+	return _apply_payload(_checkpoint.duplicate(true))
 
 
 func delete_save(slot: int = SLOT_QUICK) -> bool:

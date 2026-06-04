@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dv8kr8rfb0lu2"
+path="res://.godot/imported/vent rattle.mp3-13482940c0d18555d3919c90b60df07d.mp3str"
+
+[deps]
+
+source_file="res://assets/Sound effects/vent rattle.mp3"
+dest_files=["res://.godot/imported/vent rattle.mp3-13482940c0d18555d3919c90b60df07d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

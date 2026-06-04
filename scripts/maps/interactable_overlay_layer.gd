@@ -129,8 +129,13 @@ func _sync_persistent_overlays() -> void:
 		if path.is_empty():
 			continue
 		var texture: Texture2D = load(path) as Texture2D
-		if texture:
-			rect.texture = texture
+		if texture == null:
+			# Art for this state isn't in yet — don't fall back to a stale texture.
+			rect.texture = null
+			rect.visible = false
+			rect.modulate = HIDDEN_COLOR
+			continue
+		rect.texture = texture
 		rect.visible = true
 		rect.modulate = Color(1, 1, 1, 1)
 		if overlay_key == "door_r_far":

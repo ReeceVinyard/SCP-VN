@@ -9,6 +9,7 @@ extends Control
 @onready var _item_found_modal: Control = %ItemFoundModal
 @onready var _document_reader: Control = %DocumentReaderModal
 @onready var _npc_reaction: Control = %NpcReactionOverlay
+@onready var _security_terminal: Control = %SecurityTerminalModal
 @onready var _screen_shake: Node = %ScreenShakeController
 @onready var _inventory_button: Button = %InventoryButton
 @onready var _memories_button: Button = %MemoriesButton
@@ -18,8 +19,18 @@ extends Control
 @onready var _save_button: Button = %SaveButton
 @onready var _load_button: Button = %LoadButton
 @onready var _save_status_label: Label = %SaveStatusLabel
+@onready var _death_overlay: Control = %DeathOverlay
+@onready var _ambush_pickup: Control = %AmbushPickupOverlay
+@onready var _vent_unscrew: Control = %VentUnscrewOverlay
 
 var _status_flash_tween: Tween
+
+## Character id -> flags that mean they've died/left. Any one being set removes
+## that character's relationship line from the top status bar.
+const _CHARACTER_GONE_FLAGS := {
+	"chase": ["chase_dead"],
+	"scp1": [],
+}
 
 
 func _ready() -> void:
@@ -35,11 +46,13 @@ func _ready() -> void:
 	GameState.item_acquired.connect(_on_item_acquired)
 	_item_found_modal.confirmed.connect(_exploration.complete_pending_pickup)
 	_exploration.document_requested.connect(_on_document_requested)
+	_exploration.computer_login_requested.connect(_security_terminal.open)
 	_inventory.read_document_requested.connect(_on_inventory_read_document)
 	_document_reader.closed.connect(_on_document_closed)
 	DialogueManager.post_choice_reaction.connect(_on_post_choice_reaction)
 	_npc_reaction.finished.connect(_on_npc_reaction_finished)
 	GameState.player_name_changed.connect(_update_status)
+	GameState.flags_changed.connect(_update_status)
 	_exploration.map_changed.connect(_on_map_changed)
 	DialogueManager.map_character_mood_changed.connect(_on_map_character_mood_changed)
 	DialogueManager.character_presence_fade_in.connect(_on_character_presence_fade_in)
@@ -47,6 +60,15 @@ func _ready() -> void:
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
 	SaveManager.save_finished.connect(_on_save_finished)
 	SaveManager.load_finished.connect(_on_load_finished)
+	HuntManager.caught.connect(_on_hunt_caught)
+	_death_overlay.retry_pressed.connect(_on_retry_from_checkpoint)
+	# Honor the title screen's intent: resume the save, or start fresh.
+	var boot := GameState.boot_request
+	GameState.boot_request = ""
+	if boot == "load" and SaveManager.has_save(SaveManager.SLOT_QUICK):
+		SaveManager.load_game(SaveManager.SLOT_QUICK)
+		_apply_loaded_game()
+		return
 	_exploration.load_map(GameState.current_map_id)
 	_update_status()
 	_refresh_save_buttons()
@@ -116,7 +138,15 @@ func _on_document_closed(item_id: String, grant_item_on_close: bool) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _death_overlay.visible:
+		return
+	if _ambush_pickup and _ambush_pickup.visible:
+		return
+	if _vent_unscrew and _vent_unscrew.visible:
+		return
 	if _item_found_modal.visible or _document_reader.visible or _npc_reaction.visible or _name_modal.visible:
+		return
+	if _security_terminal.visible:
 		return
 	if _inventory.visible or _memories.visible:
 		return
@@ -138,6 +168,45 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_inventory"):
 		_inventory.toggle()
 		get_viewport().set_input_as_handled()
+
+
+func _on_hunt_caught(cause: String) -> void:
+	GameState.disable_exploration()
+	_inventory.hide()
+	_memories.hide()
+	_death_overlay.show_death(cause)
+
+
+func _on_retry_from_checkpoint() -> void:
+	_dismiss_hunt_overlays()
+	DialogueManager.force_end()
+	var restored := false
+	if SaveManager.has_checkpoint():
+		restored = SaveManager.restore_checkpoint()
+	if restored:
+		_apply_loaded_game()
+	elif _exploration.has_method("rewind_hunt_to_staircase") and GameState.has_flag(
+		"reached_staircase"
+	):
+		_exploration.rewind_hunt_to_staircase()
+		_apply_loaded_game()
+	else:
+		_perform_load()
+	_death_overlay.hide_death()
+	GameState.enable_exploration()
+
+
+func _dismiss_hunt_overlays() -> void:
+	_death_overlay.hide_death()
+	for node in get_tree().get_nodes_in_group("scene_video"):
+		if node.has_method("stop_clip"):
+			node.stop_clip()
+	for node in get_tree().get_nodes_in_group("ambush_pickup"):
+		if node.has_method("hide_pickup"):
+			node.hide_pickup()
+	for node in get_tree().get_nodes_in_group("vent_unscrew"):
+		if node.has_method("hide_unscrew"):
+			node.hide_unscrew()
 
 
 func _on_save_pressed() -> void:
@@ -270,12 +339,25 @@ func _update_status() -> void:
 	parts.append("Playing as: %s" % GameState.display_name())
 	if GameState.has_flag("missing_researcher_id"):
 		parts.append("(no ID — something may name you later)")
-	if GameState.has_flag("chase_told_amnesia"):
-		parts.append("Chase: trusts you")
-	elif GameState.has_flag("chase_lied_keycard"):
-		parts.append("Chase: irritated")
-	if GameState.has_flag("scp1_befriended"):
-		parts.append("Subject: friendly")
-	elif GameState.has_flag("scp1_hostile"):
-		parts.append("Subject: hostile")
+	# Characters drop off the status bar for continuity once they're gone (dead,
+	# departed, etc.). Add any future "left/departed" flags to the guards below.
+	if not _character_gone("chase"):
+		if GameState.has_flag("chase_told_amnesia"):
+			parts.append("Chase: trusts you")
+		elif GameState.has_flag("chase_lied_keycard"):
+			parts.append("Chase: irritated")
+	if not _character_gone("scp1"):
+		if GameState.has_flag("scp1_befriended"):
+			parts.append("Subject: friendly")
+		elif GameState.has_flag("scp1_hostile"):
+			parts.append("Subject: hostile")
 	_status_label.text = " | ".join(parts)
+
+
+## True once a character has died or otherwise left the story, so the status bar
+## stops reporting their relationship state.
+func _character_gone(character_id: String) -> bool:
+	for flag in _CHARACTER_GONE_FLAGS.get(character_id, []):
+		if GameState.has_flag(flag):
+			return true
+	return false

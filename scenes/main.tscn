@@ -15,10 +15,16 @@
 [ext_resource type="Script" uid="uid://b85mhl4l78f43" path="res://scripts/ui/map_transition_overlay.gd" id="12_transition"]
 [ext_resource type="PackedScene" path="res://scenes/ui/memory_panel.tscn" id="13_memory"]
 [ext_resource type="Script" uid="uid://3jbhywhhqn3w" path="res://scripts/ui/scene_video.gd" id="14_video"]
+[ext_resource type="Script" uid="uid://d048bmghd48r7" path="res://scripts/ui/run_cinematic.gd" id="15_run"]
+[ext_resource type="Script" uid="uid://cwujkrwrltw7v" path="res://scripts/ui/hunt_banner.gd" id="16_banner"]
+[ext_resource type="Script" uid="uid://c3ks8ue3j6sw2" path="res://scripts/ui/death_overlay.gd" id="17_death"]
+[ext_resource type="Script" path="res://scripts/ui/ambush_pickup_overlay.gd" id="18_ambush"]
+[ext_resource type="Script" path="res://scripts/ui/vent_unscrew_overlay.gd" id="19_vent"]
+[ext_resource type="PackedScene" uid="uid://secterminalarch01" path="res://scenes/ui/security_terminal_modal.tscn" id="20_terminal"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jkv2x"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dp3eg"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_jbj1t"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_0ld40"]
 
 [node name="Main" type="Control" unique_id=1172584199]
 layout_mode = 3
@@ -113,6 +119,125 @@ mouse_filter = 2
 expand = true
 script = ExtResource("14_video")
 
+[node name="AmbushPickupLayer" type="CanvasLayer" parent="." unique_id=4101000030]
+layer = 9
+
+[node name="AmbushPickupOverlay" type="Control" parent="AmbushPickupLayer" unique_id=4101000031]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("18_ambush")
+
+[node name="PickupArt" type="TextureRect" parent="AmbushPickupLayer/AmbushPickupOverlay" unique_id=4101000032]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PickupPrompt" type="Label" parent="AmbushPickupLayer/AmbushPickupOverlay" unique_id=4101000033]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 48.0
+offset_bottom = 120.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.9, 0.88, 0.82, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "There's no time for both. Click what you take."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="DogtagsZone" type="Control" parent="AmbushPickupLayer/AmbushPickupOverlay" unique_id=4101000034]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.02
+anchor_top = 0.22
+anchor_right = 0.5
+anchor_bottom = 0.8
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+
+[node name="PistolZone" type="Control" parent="AmbushPickupLayer/AmbushPickupOverlay" unique_id=4101000035]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.38
+anchor_top = 0.08
+anchor_right = 0.98
+anchor_bottom = 0.98
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+
+[node name="VentUnscrewLayer" type="CanvasLayer" parent="." unique_id=4101000040]
+layer = 9
+
+[node name="VentUnscrewOverlay" type="Control" parent="VentUnscrewLayer" unique_id=4101000041]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("19_vent")
+
+[node name="VentCloseupArt" type="TextureRect" parent="VentUnscrewLayer/VentUnscrewOverlay" unique_id=4101000042]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="VentUnscrewPrompt" type="Label" parent="VentUnscrewLayer/VentUnscrewOverlay" unique_id=4101000043]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 40.0
+offset_bottom = 100.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.88, 0.86, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "Click each screw with the screwdriver."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ScrewRoot" type="Control" parent="VentUnscrewLayer/VentUnscrewOverlay" unique_id=4101000044]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="HudLayer" type="CanvasLayer" parent="." unique_id=843922610]
 layer = 5
 
@@ -183,101 +308,93 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.03, 0.05, 0.1, 0.88)
+color = Color(0.03, 0.05, 0.1, 0.92)
 
-[node name="InvFrame" type="PanelContainer" parent="HudLayer/InventoryPanel" unique_id=1477499694]
+[node name="InvHeaderRow" type="HBoxContainer" parent="HudLayer/InventoryPanel" unique_id=68360563]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 80.0
-offset_top = 64.0
-offset_right = -80.0
-offset_bottom = -64.0
+offset_left = 48.0
+offset_top = 32.0
+offset_right = -48.0
+offset_bottom = 80.0
 grow_horizontal = 2
-grow_vertical = 2
 
-[node name="InvOuterMargin" type="MarginContainer" parent="HudLayer/InventoryPanel/InvFrame" unique_id=1518548526]
-layout_mode = 2
-theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 36
-theme_override_constants/margin_bottom = 28
-
-[node name="InvMainVBox" type="VBoxContainer" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin" unique_id=883493586]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="InvHeaderRow" type="HBoxContainer" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox" unique_id=68360563]
-layout_mode = 2
-
-[node name="InvTitle" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvHeaderRow" unique_id=475234780]
+[node name="InvTitle" type="Label" parent="HudLayer/InventoryPanel/InvHeaderRow" unique_id=475234780]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Inventory"
 
-[node name="InvCloseButton" type="Button" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvHeaderRow" unique_id=2042119753]
+[node name="InvCloseButton" type="Button" parent="HudLayer/InventoryPanel/InvHeaderRow" unique_id=2042119753]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(140, 44)
 layout_mode = 2
 text = "Close (I)"
 
-[node name="InvBodyHBox" type="HBoxContainer" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox" unique_id=1593113606]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 40
-
-[node name="InvListColumn" type="VBoxContainer" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox" unique_id=1125102496]
-custom_minimum_size = Vector2(320, 0)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 12
-
-[node name="InvListLabel" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvListColumn" unique_id=1513226105]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.76, 0.85, 1)
-theme_override_font_sizes/font_size = 16
-text = "Items"
-
-[node name="ItemList" type="ItemList" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvListColumn" unique_id=1177270490]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-
-[node name="InvEmptyLabel" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvListColumn" unique_id=1797050879]
+[node name="InvEmptyLabel" type="Label" parent="HudLayer/InventoryPanel" unique_id=1797050879]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
-size_flags_vertical = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -40.0
+offset_right = 380.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_colors/font_color = Color(0.7, 0.74, 0.82, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "Your bag is empty. Explore the room to find supplies."
+horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="InvDetailColumn" type="VBoxContainer" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox" unique_id=501142374]
+[node name="InvCardHost" type="Control" parent="HudLayer/InventoryPanel" unique_id=900100001]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(900, 760)
+layout_mode = 1
+mouse_filter = 2
+
+[node name="InvCard" type="PanelContainer" parent="HudLayer/InventoryPanel/InvCardHost" unique_id=900100002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InvCardMargin" type="MarginContainer" parent="HudLayer/InventoryPanel/InvCardHost/InvCard" unique_id=900100003]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 32
+
+[node name="InvDetailColumn" type="VBoxContainer" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin" unique_id=501142374]
+layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="ItemIcon" type="TextureRect" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=348945677]
+[node name="ItemIcon" type="TextureRect" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=348945677]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(560, 360)
+custom_minimum_size = Vector2(520, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 expand_mode = 1
 stretch_mode = 5
 
-[node name="InvIconPlaceholder" type="Panel" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=348945678]
+[node name="InvIconPlaceholder" type="Panel" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=348945678]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(560, 360)
+custom_minimum_size = Vector2(520, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="InvIconPlaceholderLabel" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn/InvIconPlaceholder" unique_id=348945679]
+[node name="InvIconPlaceholderLabel" type="Label" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn/InvIconPlaceholder" unique_id=348945679]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -291,52 +408,95 @@ text = "Artwork pending"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InvItemName" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=865511137]
+[node name="InvItemName" type="Label" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=865511137]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
 text = "Item name"
+horizontal_alignment = 1
 
-[node name="InvCategoryLabel" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=865511138]
+[node name="InvCategoryLabel" type="Label" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=865511138]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.6, 0.78, 0.86, 1)
 theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
 
-[node name="DescriptionLabel" type="Label" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=235306691]
+[node name="DescriptionLabel" type="Label" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=235306691]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.78, 0.82, 0.9, 1)
 theme_override_font_sizes/font_size = 20
 text = "No items yet."
+horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="InvReadButton" type="Button" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=1410267355]
+[node name="InvReadButton" type="Button" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=1410267355]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 text = "Read document"
 
-[node name="IdSwapRow" type="HBoxContainer" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn" unique_id=2044056948]
+[node name="IdSwapRow" type="HBoxContainer" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn" unique_id=2044056948]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
-[node name="InvIdMaleButton" type="Button" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn/IdSwapRow" unique_id=311018945]
+[node name="InvIdMaleButton" type="Button" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn/IdSwapRow" unique_id=311018945]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 text = "Male ID"
 
-[node name="InvIdFemaleButton" type="Button" parent="HudLayer/InventoryPanel/InvFrame/InvOuterMargin/InvMainVBox/InvBodyHBox/InvDetailColumn/IdSwapRow" unique_id=365200271]
+[node name="InvIdFemaleButton" type="Button" parent="HudLayer/InventoryPanel/InvCardHost/InvCard/InvCardMargin/InvDetailColumn/IdSwapRow" unique_id=365200271]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 text = "Female ID"
+
+[node name="InvBottomBar" type="HBoxContainer" parent="HudLayer/InventoryPanel" unique_id=900100004]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -120.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+theme_override_constants/separation = 48
+
+[node name="InvPrevButton" type="Button" parent="HudLayer/InventoryPanel/InvBottomBar" unique_id=900100005]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "◀"
+
+[node name="InvCounterLabel" type="Label" parent="HudLayer/InventoryPanel/InvBottomBar" unique_id=900100006]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.84, 0.92, 1)
+theme_override_font_sizes/font_size = 24
+text = "1 / 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InvNextButton" type="Button" parent="HudLayer/InventoryPanel/InvBottomBar" unique_id=900100007]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "▶"
 
 [node name="MemoryPanel" parent="HudLayer" unique_id=968530700 instance=ExtResource("13_memory")]
 unique_name_in_owner = true
@@ -600,9 +760,9 @@ theme_override_colors/font_uneditable_color = Color(0.12, 0.1, 0.08, 0)
 theme_override_colors/font_placeholder_color = Color(0.12, 0.1, 0.08, 0)
 theme_override_colors/caret_color = Color(0.12, 0.1, 0.08, 1)
 theme_override_font_sizes/font_size = 35
-theme_override_styles/normal = SubResource("StyleBoxEmpty_jkv2x")
-theme_override_styles/read_only = SubResource("StyleBoxEmpty_jkv2x")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_jkv2x")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dp3eg")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_dp3eg")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_dp3eg")
 alignment = 1
 max_length = 24
 context_menu_enabled = false
@@ -655,7 +815,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 toggle_mode = true
-button_group = SubResource("ButtonGroup_jbj1t")
+button_group = SubResource("ButtonGroup_0ld40")
 text = "Male ID"
 
 [node name="IdFemaleButton" type="Button" parent="ModalLayer/NameEntryModal/IdStage/StageCenter/CardColumn/SwapCenter/IdSwapBlock/IdSwapRow" unique_id=408973858]
@@ -663,7 +823,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 44)
 layout_mode = 2
 toggle_mode = true
-button_group = SubResource("ButtonGroup_jbj1t")
+button_group = SubResource("ButtonGroup_0ld40")
 text = "Female ID"
 
 [node name="ItemFoundModal" type="Control" parent="ModalLayer" unique_id=516463321]
@@ -770,6 +930,9 @@ unique_name_in_owner = true
 [node name="NpcReactionOverlay" parent="ModalLayer" unique_id=371721966 instance=ExtResource("9_reaction")]
 unique_name_in_owner = true
 
+[node name="SecurityTerminalModal" parent="ModalLayer" unique_id=371721967 instance=ExtResource("20_terminal")]
+unique_name_in_owner = true
+
 [node name="CinematicLayer" type="CanvasLayer" parent="." unique_id=1355128406]
 layer = 100
 
@@ -799,3 +962,134 @@ script = ExtResource("12_transition")
 unique_name_in_owner = true
 script = ExtResource("10_shake")
 shake_targets = Array[NodePath]([NodePath("../WorldLayer/MapHost")])
+
+[node name="RunCinematicLayer" type="CanvasLayer" parent="." unique_id=-193967295]
+layer = 95
+
+[node name="RunCinematic" type="Control" parent="RunCinematicLayer" unique_id=-193967294]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15_run")
+
+[node name="RunBg" type="ColorRect" parent="RunCinematicLayer/RunCinematic" unique_id=-193967293]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.05, 0.05, 0.07, 1)
+
+[node name="RunFrame" type="TextureRect" parent="RunCinematicLayer/RunCinematic" unique_id=-193967292]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HuntLayer" type="CanvasLayer" parent="." unique_id=-193967286]
+layer = 96
+
+[node name="HuntBanner" type="Control" parent="HuntLayer" unique_id=-193967285]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("16_banner")
+
+[node name="HuntBannerLabel" type="Label" parent="HuntLayer/HuntBanner" unique_id=-193967284]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.92, 0.1, 0.12, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 84
+text = "THE HUNT IS ON"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DeathLayer" type="CanvasLayer" parent="." unique_id=-193967276]
+layer = 120
+
+[node name="DeathOverlay" type="Control" parent="DeathLayer" unique_id=-193967275]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("17_death")
+
+[node name="DeathDim" type="ColorRect" parent="DeathLayer/DeathOverlay" unique_id=-193967274]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.9)
+
+[node name="DeathCenter" type="CenterContainer" parent="DeathLayer/DeathOverlay" unique_id=-193967273]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeathVBox" type="VBoxContainer" parent="DeathLayer/DeathOverlay/DeathCenter" unique_id=-193967272]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="DeathTitle" type="Label" parent="DeathLayer/DeathOverlay/DeathCenter/DeathVBox" unique_id=-193967271]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.07, 0.09, 1)
+theme_override_font_sizes/font_size = 96
+text = "YOU DIED"
+horizontal_alignment = 1
+
+[node name="DeathSubtitle" type="Label" parent="DeathLayer/DeathOverlay/DeathCenter/DeathVBox" unique_id=-193967270]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.82, 1)
+theme_override_font_sizes/font_size = 24
+text = "It found you in the dark."
+horizontal_alignment = 1
+
+[node name="DeathRetryButton" type="Button" parent="DeathLayer/DeathOverlay/DeathCenter/DeathVBox" unique_id=-193967269]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Retry"

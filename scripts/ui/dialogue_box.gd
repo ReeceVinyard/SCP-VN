@@ -12,8 +12,11 @@ const CHOICE_FONT_SIZE := 16
 @onready var _choices_box: VBoxContainer = %ChoicesBox
 @onready var _continue_hint: Label = %ContinueHint
 
+var _suppress_for_cutscene := false
+
 
 func _ready() -> void:
+	add_to_group("dialogue_box")
 	DialogueManager.line_shown.connect(_on_line_shown)
 	DialogueManager.choices_requested.connect(_on_choices_requested)
 	DialogueManager.dialogue_started.connect(_on_dialogue_started)
@@ -48,7 +51,20 @@ func _on_gui_input(event: InputEvent) -> void:
 		%ClickCatcher.accept_event()
 
 
+## Hides the panel immediately and blocks deferred dialogue_ended from re-showing it
+## for a frame while a full-screen cutscene starts.
+func hide_for_cutscene() -> void:
+	_suppress_for_cutscene = true
+	hide()
+	%ClickCatcher.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hide_choices()
+	_speaker_label.text = ""
+	_body_label.text = ""
+	get_viewport().gui_release_focus()
+
+
 func _on_dialogue_started() -> void:
+	_suppress_for_cutscene = false
 	show()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	%ClickCatcher.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -61,6 +77,11 @@ func _on_dialogue_ended(_ended_knot: String = "") -> void:
 
 
 func _apply_dialogue_end_visibility() -> void:
+	if _suppress_for_cutscene:
+		hide()
+		%ClickCatcher.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_hide_choices()
+		return
 	if DialogueManager.is_active:
 		show()
 		%ClickCatcher.mouse_filter = Control.MOUSE_FILTER_STOP

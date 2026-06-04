@@ -30,7 +30,57 @@ const ITEMS := {
 		"icon": "res://assets/items/EH-14.png",
 		"readable": true,
 	},
+	# --- Hunt-sequence items ---------------------------------------------------
+	"chase_pistol": {
+		"display_name": "Chase's Sidearm",
+		"category": "Equipment",
+		"description": "Chase's pistol. Heavier than it looks. Nearly empty.",
+		"examine": "Standard security-issue sidearm. The slide's scratched to hell. One round left in the magazine.",
+		"icon": "res://assets/items/pistol.png",
+	},
+	"chase_dogtags": {
+		"display_name": "Chase's Dog Tags",
+		"category": "Keepsake",
+		"description": "Still warm. CHASE, R. — Security, Tier 2.",
+		"examine": "Two stamped tags on a chain. You don't remember him, but you took these. It felt wrong to leave them.",
+		"icon": "res://assets/Interactables/dogtag.png",
+	},
+	"ammo": {
+		"display_name": "Pistol Rounds",
+		"category": "Equipment",
+		"description": "A loose handful of rounds. Enough to matter, maybe.",
+		"icon": "res://assets/items/ammo.png",
+	},
+	# Icon is battery-aware (see get_icon_path / WALKIE_BATTERY_ICONS), so no static "icon".
+	"walkie_talkie": {
+		"display_name": "Walkie-Talkie",
+		"category": "Equipment",
+		"description": "Crackling with static. Someone, somewhere, might still be listening.",
+	},
+	"screwdriver": {
+		"display_name": "Screwdriver",
+		"category": "Tool",
+		"description": "A flat-head screwdriver from the security desk. Good for vent grilles.",
+		"icon": "res://assets/items/screwdriver.png",
+	},
 }
+
+## Walkie-talkie icon swaps with the current battery percentage (GameState.walkie_battery).
+## The art is named by the level it represents; we show the highest level at or below
+## the current charge.
+const WALKIE_BATTERY_ICONS := [
+	{"min": 75, "path": "res://assets/items/walkietalkie_battery_75.png"},
+	{"min": 35, "path": "res://assets/items/walkietalkie_battery_35.png"},
+	{"min": 5, "path": "res://assets/items/walkietalkie_battery_5perc.png"},
+	{"min": 0, "path": "res://assets/items/walkietalkie_battery_dead.png"},
+]
+
+
+static func walkie_icon_for_battery(pct: int) -> String:
+	for entry in WALKIE_BATTERY_ICONS:
+		if pct >= int(entry["min"]):
+			return str(entry["path"])
+	return str(WALKIE_BATTERY_ICONS[-1]["path"])
 
 
 static func is_readable_document(item_id: String) -> bool:
@@ -56,6 +106,8 @@ static func get_icon_path(item_id: String) -> String:
 		if GameState.id_variant == "female":
 			return data.get("icon_female", "")
 		return data.get("icon_male", "")
+	if item_id == "walkie_talkie":
+		return walkie_icon_for_battery(GameState.walkie_battery)
 	return data.get("icon", "")
 
 

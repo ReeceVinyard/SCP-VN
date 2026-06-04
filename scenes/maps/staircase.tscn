@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://co1hv4jns1u" path="res://scripts/hotspot_zone.gd" id="2_hotspot"]
+[ext_resource type="Script" uid="uid://bq51id45y1wx6" path="res://scripts/maps/map_editor_canvas.gd" id="4_canvas"]
+
+[node name="StaircaseMap" type="Control"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_canvas")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.07, 0.08, 0.1, 1)
+
+[node name="Hotspots" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="SecurityDoor" type="Control" parent="Hotspots"]
+layout_mode = 1
+anchor_left = 0.42
+anchor_top = 0.3
+anchor_right = 0.58
+anchor_bottom = 0.85
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "security_door"
+label_text = "Door"
+knot = "stairs_door_flavor"
+
+[node name="DoorLeft" type="Control" parent="Hotspots"]
+layout_mode = 1
+anchor_left = 0.06
+anchor_top = 0.33
+anchor_right = 0.2
+anchor_bottom = 0.82
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "stair_left"
+label_text = "Door"
+knot = "stairs_door_flavor"
+
+[node name="DoorRight" type="Control" parent="Hotspots"]
+layout_mode = 1
+anchor_left = 0.8
+anchor_top = 0.33
+anchor_right = 0.94
+anchor_bottom = 0.82
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Door"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "stair_right"
+label_text = "Door"
+knot = "stairs_door_flavor"
+
+[node name="StairsDown" type="Control" parent="Hotspots"]
+layout_mode = 1
+anchor_left = 0.34
+anchor_top = 0.86
+anchor_right = 0.66
+anchor_bottom = 0.99
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "Stairs down"
+mouse_default_cursor_shape = 2
+script = ExtResource("2_hotspot")
+hotspot_id = "stair_down"
+label_text = "Stairs down"
+knot = "stairs_door_flavor"

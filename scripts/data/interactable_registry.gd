@@ -8,6 +8,7 @@ const MAP_OVERLAYS := {
 		"desk": "res://assets/Interactables/lab1_drawer.png",
 		"locker": "res://assets/Interactables/lab1_locker.png",
 		"door": "res://assets/Interactables/lab1_door.png",
+		"door_keypad_locked": "res://assets/Interactables/lab1_keypad.png",
 		"door_keypad_unlocked": "res://assets/Interactables/lab1_keypad_green.png",
 		"shelf": "res://assets/Interactables/lab1_notebook.png",
 		"clock": "res://assets/Interactables/lab1_clock.png",
@@ -29,6 +30,21 @@ const MAP_OVERLAYS := {
 		"sign": "res://assets/Interactables/Corridor 2 sign.png",
 		"chase_at_door": "res://assets/Characters/Chase/chase.png",
 	},
+	"security_room": {
+		"cameras": "res://assets/Interactables/security_cctv.png",
+		"walkie": "res://assets/Interactables/security_walkie_talkie.png",
+		"tool": "res://assets/Interactables/security_drawer.png",
+		# Ammo lives in a different drawer, so it needs its own full-screen art
+		# (the drawer painted in place, transparent elsewhere) — the same way every
+		# other interactable has its own PNG. Reusing security_drawer.png would glow
+		# the screwdriver drawer instead.
+		"ammo": "res://assets/Interactables/security_ammo_drawer.png",
+		"vent": "res://assets/Interactables/security_vent.png",
+		"alarm": "res://assets/Interactables/security_alarm.png",
+		"notepad": "res://assets/Interactables/security_notepad.png",
+		"login": "res://assets/Interactables/security_login.png",
+		"door": "res://assets/Interactables/security_door.png",
+	},
 	"corridor_forward": {
 		"return_hall": "res://assets/Interactables/corridor3_door_L_close.png",
 		"door_l_far": "res://assets/Interactables/corridor3_door_L_far.png",
@@ -44,6 +60,7 @@ const MAP_OVERLAYS := {
 const OVERLAY_REQUIRES_FLAG := {
 	"hall_papers": {},
 	"corridor_forward": {},
+	"security_room": {},
 }
 
 ## Keys that only supply art for resolve_texture_path / state overlays — not hover hotspots.
@@ -76,7 +93,7 @@ static func overlay_z_index_for(map_id: String, overlay_key: String) -> int:
 ## Overlay keys that layer on top of a hotspot (not separate interactables).
 const SECONDARY_OVERLAY_KEYS := {
 	"archives": {
-		"door": ["door_keypad_unlocked"],
+		"door": ["door_keypad_locked", "door_keypad_unlocked"],
 	},
 }
 
@@ -103,6 +120,16 @@ const OVERLAY_HIT_RECTS := {
 		"door_r_close": Rect2(0.8281, 0.0333, 0.1292, 0.8870),
 		"door_r_far": Rect2(0.6937, 0.2241, 0.0594, 0.4981),
 		"sign": Rect2(0.4484, 0.325, 0.0974, 0.0926),
+	},
+	"security_room": {
+		"cameras": Rect2(0.5266, 0.1028, 0.4719, 0.3556),
+		"walkie": Rect2(0.7812, 0.6889, 0.0734, 0.0528),
+		"tool": Rect2(0.4422, 0.85, 0.0563, 0.0861),
+		"vent": Rect2(0.0, 0.6611, 0.1031, 0.2444),
+		"alarm": Rect2(0.1047, 0.4861, 0.0219, 0.0528),
+		"notepad": Rect2(0.8406, 0.7139, 0.1078, 0.0806),
+		"login": Rect2(0.6906, 0.4611, 0.1422, 0.2278),
+		"door": Rect2(0.1375, 0.1444, 0.1781, 0.7444),
 	},
 	"corridor_forward": {
 		"return_hall": Rect2(0.0365, 0.0389, 0.1302, 0.8889),
@@ -136,6 +163,11 @@ static func resolve_texture_path(map_id: String, hotspot_id: String) -> String:
 			var open_path: String = paths.get("door_r_far_open", "")
 			if not open_path.is_empty():
 				return open_path
+	if map_id == "security_room" and hotspot_id == "vent":
+		# Once the vent is open the grille is gone (painted into the swapped
+		# background), so suppress the closed-grille hover glow entirely.
+		if GameState.has_flag("vent_opened"):
+			return ""
 	return paths.get(hotspot_id, "")
 
 
@@ -150,6 +182,10 @@ static func resolve_secondary_overlay_paths(map_id: String, hotspot_id: String) 
 	for key in keys:
 		if hotspot_id == "door" and str(key) == "door_keypad_unlocked":
 			if not GameState.has_item("keycard"):
+				continue
+		if hotspot_id == "door" and str(key) == "door_keypad_locked":
+			# Locked (red) keypad shows until the player has the keycard.
+			if GameState.has_item("keycard"):
 				continue
 		var path: String = paths.get(key, "")
 		if not path.is_empty():
